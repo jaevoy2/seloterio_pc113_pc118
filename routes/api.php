@@ -1,0 +1,16 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Models\Student;
+use App\Models\Employee;
+use App\Http\Controllers\ListController;
+
+
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
+
+Route::get('/employee', [ListController::class, 'employee']);
+
+
