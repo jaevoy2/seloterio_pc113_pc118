@@ -7,10 +7,12 @@ use App\Models\Employee;
 use App\Http\Controllers\ListController;
 
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 Route::get('/employee', [ListController::class, 'employee']);
+Route::get('/student', [ListController::class, 'student']);
+Route::get('/find', [ListController::class, 'searchEmployee']);
 
 
