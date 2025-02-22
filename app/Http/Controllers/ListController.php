@@ -11,7 +11,6 @@ class ListController extends Controller
     public function employee(){
         return response()->json([
             Employee::all(),
-            Student::all()
         ]);
     }
 
@@ -29,6 +28,55 @@ class ListController extends Controller
         }
 
         return response()->json($employee->get());
+    }
+
+    public function limit(Request $request){
+        if($request->has('limit')) {
+            $employee = Employee::paginate($request->limit);
+            return response()->json($employee);
+        }
+
+    }
+
+    public function create(Request $request){
+            $validate = $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'address' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+            $employee = Employee::create($validate);
+
+            return response()->json([
+                'post' => $employee
+            ]);
+    }
+
+    public function delete(Request $request){
+        $employee = Employee::find($request->id);
+        $employee->delete();
+
+        return response()->json([
+            'message' => 'Employee deleted successfully',
+        ]);
+    }
+
+    public function update(Request $request){
+        $employee = Employee::find($request->id);
+        $validate = $request->validate([
+            'firstname' => 'string',
+            'lastname' => 'string',
+            'address' => 'string',
+            'email' => 'string',
+            'password' => 'string',
+        ]);
+        $employee->update($validate);
+
+        return response()->json([
+            'message' => 'Employee updated successfully',
+            'data' => $employee
+        ]);
     }
 
 }

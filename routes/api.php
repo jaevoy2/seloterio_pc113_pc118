@@ -14,5 +14,8 @@ Route::get('/user', function (Request $request) {
 Route::get('/employee', [ListController::class, 'employee']);
 Route::get('/student', [ListController::class, 'student']);
 Route::get('/find', [ListController::class, 'searchEmployee']);
-
+Route::get('/limit', [ListController::class, 'limit']);
+Route::post('create', [ListController::class, 'create']);
+Route::delete('/delete', [ListController::class, 'delete']);
+Route::put('/update/{id}', [ListController::class, 'update']);
 
