@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
 use App\Models\Employee;
+use Hash;
 
 class ListController extends Controller
 {
@@ -44,8 +47,8 @@ class ListController extends Controller
                 'lastname' => 'required',
                 'address' => 'required',
                 'email' => 'required',
-                'password' => 'required',
             ]);
+            $validate['password'] = bcrypt($request->password);
             $employee = Employee::create($validate);
 
             return response()->json([
@@ -78,5 +81,25 @@ class ListController extends Controller
             'data' => $employee
         ]);
     }
+
+    public function login(Request $request) {
+        $employee = Employee::where('email', $request->email)->first();
+        if($employee && Hash::check($request->password, $employee->password)) {
+            $token = $employee->createToken('personal-token')->plainTextToken;
+            return response()->json([
+                'token' => $token,
+                'data' => [
+                    'name' => $employee->firstname,
+                    'lastname' => $employee->lastname
+                ]
+            ]);
+        }else{
+            return response()->json([
+                'data' => 'login failed'
+            ]);
+        }
+    }
+
+
 
 }
