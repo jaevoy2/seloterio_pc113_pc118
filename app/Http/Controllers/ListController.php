@@ -84,6 +84,7 @@ class ListController extends Controller
 
     public function login(Request $request) {
         $employee = Employee::where('email', $request->email)->first();
+
         if($employee && Hash::check($request->password, $employee->password)) {
             $token = $employee->createToken('personal-token')->plainTextToken;
             return response()->json([
