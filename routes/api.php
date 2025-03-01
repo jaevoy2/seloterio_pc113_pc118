@@ -12,15 +12,17 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/login', [UserController::class, 'login']);
 Route::post('/create-user', [UserController::class, 'create']);
 
-Route::middleware('permission')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/login', [UserController::class, 'login']);
     Route::get('/index', [UserController::class, 'index']);
-    // Route::get('/employeeList', [UserController::class, 'employeeList'])->middleware('admin');
-    Route::get('/employee', [ListController::class, 'employee']);
+    Route::prefix('admin')->group(function() {
+        Route::get('/employeeList', [UserController::class, 'employeeList'])->middleware('admin');
+        Route::get('/find', [ListController::class, 'searchEmployee'])->middleware('admin');
+        Route::get('/employee', [ListController::class, 'employee'])->middleware('admin');
+    });
     Route::get('/student', [ListController::class, 'student']);
-    Route::get('/find', [ListController::class, 'searchEmployee']);
     Route::get('/limit', [ListController::class, 'limit']);
     Route::post('create', [ListController::class, 'create']);
     Route::delete('/delete', [ListController::class, 'delete']);

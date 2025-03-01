@@ -16,13 +16,15 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $credentials = User::where('email', $request->email)->first();
-        if($credentials){
-            return $next($request);
-        }else{
-            return response()->json([
-                'message' => 'You do not have permission to access this resource'
-            ]);
+        if($credentials = User::where('email', $request->email)->first()){
+            if($credentials->role == 0){
+                return $next($request);
+            }else{
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
         }
+        return response()->json([
+            'message' => 'Unknown user'
+        ], 401);
     }
 }
