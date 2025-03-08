@@ -13,9 +13,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/create-user', [UserController::class, 'create']);
+Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/login', [UserController::class, 'login']);
     Route::get('/index', [UserController::class, 'index']);
     Route::prefix('admin')->group(function() {
         Route::get('/employeeList', [UserController::class, 'employeeList'])->middleware('admin');

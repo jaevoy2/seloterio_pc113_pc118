@@ -21,17 +21,17 @@ class UserController extends Controller
     }
 
     public function create(Request $request){
-        $validate = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'role' => 'required'
-        ]);
-        $validate['password'] = bcrypt($request->password);
-        $user = User::create($validate);
+            $validate = $request->validate([
+                'name',
+                'email',
+                'role'
+            ]);
+            $validate['password'] = bcrypt($request->password);
+            $user = User::create($validate);
 
-        return response()->json([
-            'post' => $user
-        ]);
+            return response()->json([
+                'post' => $user
+            ]);
     }
 
     public function login(Request $request) {
@@ -48,7 +48,5 @@ class UserController extends Controller
                 'data' => 'login failed'
             ]);
         }
-
-        // return response()->json($credentials);
     }
 }

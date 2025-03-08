@@ -18,12 +18,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && Auth::user()->role == 0){
-            return $next($request);
-        }else{
-            return response()->json([
-                'message' => 'You are not an admin'
-            ]);
-        }
+
+            if(Auth::check() && Auth::user()->role == 0){
+                return $next($request);
+            }else{
+                return response()->json([
+                    'message' => 'You are not an admin'
+                ]);
+            }
+
     }
 }

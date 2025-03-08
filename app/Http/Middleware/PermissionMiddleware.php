@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
+use Exception;
 
 class PermissionMiddleware
 {
@@ -16,15 +17,22 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($credentials = User::where('email', $request->email)->first()){
-            if($credentials->role == 0){
-                return $next($request);
-            }else{
-                return response()->json(['message' => 'Unauthorized'], 401);
+        try{
+            if($credentials = User::where('username', $request->email)->first()){
+                if($credentials->role == 0){
+                    return $next($request);
+                }else{
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }
             }
+            return response()->json([
+                'message' => 'User not found'
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => 'ni gana na'
+            ], 400);
         }
-        return response()->json([
-            'message' => 'Unknown user'
-        ], 401);
     }
 }
