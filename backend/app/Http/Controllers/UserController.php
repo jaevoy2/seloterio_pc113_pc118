@@ -13,10 +13,14 @@ use Hash;
 class UserController extends Controller
 {
     public function index(){
-        return response()->json(User::all());
+        $user = Auth::user();
+        return response()->json([
+            'students' => Student::all()
+        ]);
     }
 
     public function employeeList(){
+        $user = Auth::user();
         return response()->json(Employee::all());
     }
 
@@ -37,7 +41,7 @@ class UserController extends Controller
     public function login(Request $request) {
         $credentials = User::where('email', $request->email)->first();
 
-        if($credentials) {
+        if($credentials && Hash::check($request->password, $credentials->password)) {
             $token = $credentials->createToken('personal-token')->plainTextToken;
             return response()->json([
                 'token' => $token,
@@ -45,7 +49,8 @@ class UserController extends Controller
             ]);
         }else{
             return response()->json([
-                'data' => 'login failed'
+                'data' => 'lol',
+                'message' => 'login failed'
             ]);
         }
     }

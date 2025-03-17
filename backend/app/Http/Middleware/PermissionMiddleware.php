@@ -5,8 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Exception;
+use Hash;
 
 class PermissionMiddleware
 {
@@ -18,16 +20,17 @@ class PermissionMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try{
-            if($credentials = User::where('username', $request->email)->first()){
-                if($credentials->role == 0){
+            $user = Auth::user();
+                if($user->role == 0){
                     return $next($request);
                 }else{
                     return response()->json(['message' => 'Unauthorized'], 401);
                 }
-            }
-            return response()->json([
-                'message' => 'User not found'
-            ]);
+            // }
+            // return response()->json([
+            //     'data' => $request->email,
+            //     'message' => 'User not found lol'
+            // ]);
         }catch(Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
