@@ -11,20 +11,22 @@
 <body>
     <h1>Dashboard</h1>
 
-    <table class="table stripe" id="studentTable">
-    <thead class="table-dark" style="">
-        <tr class="">
-        <th scope="col">Id</th>
-        <th scope="col">Firstname</th>
-        <th scope="col">Lastname</th>
-        <th scope="col">Course</th>
-        <th scope="col">Email</th>
-        </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-    </table>
+    <div class="container">        
+        <table class="table stripe" id="studentTable">
+        <thead class="table-dark" style="">
+            <tr class="">
+            <th scope="col">Id</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Course</th>
+            <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+    
+        </tbody>
+        </table>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
@@ -45,6 +47,10 @@
         })
         .then(response => response.json())
         .then(data => {
+            if(data.message){
+                localStorage.removeItem('token', data.token);
+                window.location.href = 'http://frontend-folder.test';
+            }
             console.log(data);
             $('#studentTable').DataTable({
                 data : data.students,

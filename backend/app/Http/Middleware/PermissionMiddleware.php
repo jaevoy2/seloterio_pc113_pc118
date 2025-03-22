@@ -26,11 +26,6 @@ class PermissionMiddleware
                 }else{
                     return response()->json(['message' => 'Unauthorized'], 401);
                 }
-            // }
-            // return response()->json([
-            //     'data' => $request->email,
-            //     'message' => 'User not found lol'
-            // ]);
         }catch(Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
