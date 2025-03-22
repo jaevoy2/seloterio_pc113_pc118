@@ -22,6 +22,7 @@ Route::middleware('permission')->group(function() {
         Route::get('/employeeList', [UserController::class, 'employeeList'])->middleware('admin');
         Route::get('/find', [ListController::class, 'searchEmployee'])->middleware('admin');
         Route::get('/employee', [ListController::class, 'employee'])->middleware('admin');
+        Route::post('/add-employee', [ListController::class, 'create'])->middleware('admin');
     });
     Route::get('/limit', [ListController::class, 'limit']);
     Route::delete('/delete', [ListController::class, 'delete']);
@@ -29,5 +30,4 @@ Route::middleware('permission')->group(function() {
 });
 
 
-Route::post('/create', [ListController::class, 'create']);
 Route::get('/student', [ListController::class, 'student']);

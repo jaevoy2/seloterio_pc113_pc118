@@ -49,8 +49,7 @@ class UserController extends Controller
             ]);
         }else{
             return response()->json([
-                'data' => 'lol',
-                'message' => 'login failed'
+                'message' => 'Invalid credentials'
             ]);
         }
     }
