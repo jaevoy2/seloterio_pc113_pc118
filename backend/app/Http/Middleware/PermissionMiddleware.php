@@ -21,7 +21,7 @@ class PermissionMiddleware
     {
         try{
             $user = Auth::user();
-                if($user->role == 0){
+                if($user){
                     return $next($request);
                 }else{
                     return response()->json(['message' => 'Unauthorized'], 401);
@@ -29,7 +29,6 @@ class PermissionMiddleware
         }catch(Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
-                'data' => 'ni gana na'
             ], 400);
         }
     }

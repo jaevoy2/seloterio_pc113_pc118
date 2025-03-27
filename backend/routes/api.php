@@ -23,10 +23,10 @@ Route::middleware('permission')->group(function() {
         Route::get('/find', [ListController::class, 'searchEmployee'])->middleware('admin');
         Route::get('/employee', [ListController::class, 'employee'])->middleware('admin');
         Route::post('/add-employee', [ListController::class, 'create'])->middleware('admin');
+        Route::post('/delete', [ListController::class, 'delete'])->middleware('admin');
+        Route::put('/update', [ListController::class, 'updateEmployee']);
     });
     Route::get('/limit', [ListController::class, 'limit']);
-    Route::delete('/delete', [ListController::class, 'delete']);
-    Route::put('/update/{id}', [ListController::class, 'update']);
 });
 
 

@@ -65,19 +65,18 @@ class ListController extends Controller
         ]);
     }
 
-    public function update(Request $request){
+    public function updateEmployee(Request $request){
         $employee = Employee::find($request->id);
         $validate = $request->validate([
             'firstname' => 'string',
             'lastname' => 'string',
             'address' => 'string',
-            'email' => 'string',
             'password' => 'string',
         ]);
         $employee->update($validate);
 
         return response()->json([
-            'message' => 'Employee updated successfully',
+            'success' => 'Employee updated successfully',
             'data' => $employee
         ]);
     }
