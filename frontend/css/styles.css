@@ -153,6 +153,10 @@ body{
     font-size: 16px;
 }
 
+.swal2-toast {
+    transform: none !important;
+}
+
 
 .checkbox-container{
     display: flex;

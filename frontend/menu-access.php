@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://backend-folder.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../css/styles.css">
     <title>Document</title>
 </head>
 <body>
-
-
-    
-    <?php include 'partials/sidebar.php' ?>
+     <?php include 'partials/sidebar.php' ?>
     <div class="card_con position-relative" style="width: 100%" style="">
         <div class="list-group-flush list-unstyled">
             <div class="list-group-item p-0">
@@ -61,19 +60,24 @@
                         <p class="fw-semibold">Loading...</p>
                     </div>
                     <div class="no-internet opacity-50 position-absolute top-50 start-50 translate-middle text-center" style="display: none;" id="no-internet">
-                        <img class="" src="{{asset('images/no-internet.png')}}" style="width: 30%"></img>
+                        <img class="" src="" style="width: 30%"></img>
                         <p class="fw-semibold">No internet connection</p>
                     </div>
                     <div class="mt-4 py-3" style="display: none;" id="content">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="dashboard.php">Dashboard</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">Menu Access Control</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
                                 </li>
                             </ol>
                         </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container py-3">
-                            <p class="fw-semibold">Dashboard Page </p>
+                        <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3">
+                            <div class="px-3">
+
+                            </div>
                         </div>
                     </div>  
                 </div>
@@ -81,38 +85,38 @@
         </div>
     </div>
 
+
     <?php include 'modals/logout-modal.php' ?>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-<script>
-    const token = localStorage.getItem('token');
-    if(!token) {
-        window.location.href = 'http://frontend-folder.test';
-    }else{
-        if (window.history && window.history.pushState) {
-            window.history.pushState(null, null, location.href);
-            window.onpopstate = function () {
-                window.history.pushState(null, null, location.href); // Prevent back
-            };
-        }
-    }
-</script>
-
-<script>
-    window.addEventListener("load", function() {
-        setTimeout(() => {
-            if(navigator.onLine) {
-                document.getElementById('preloader').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-            }else{
-                document.getElementById('preloader').style.display = 'none';
-                document.getElementById('no-internet').style.display = 'block';
+    <!-- prevent back -->
+    <script>
+        const token = localStorage.getItem('token');
+        if(!token) {
+            window.location.href = 'http://frontend-folder.test';
+        }else{
+            if (window.history && window.history.pushState) {
+                window.history.pushState(null, null, location.href);
+                window.onpopstate = function () {
+                    window.history.pushState(null, null, location.href); // Prevent back
+                };
             }
-        }, 800);
-    })
-</script>
+        }
+    </script>
 
-</body>
-</html>
+    <!-- preloader -->
+    <script>
+        window.addEventListener("load", function() {
+            setTimeout(() => {
+                if(navigator.onLine) {
+                    document.getElementById('preloader').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                }else{
+                    document.getElementById('preloader').style.display = 'none';
+                    document.getElementById('no-internet').style.display = 'block';
+                }
+            }, 800);
+        })
+    </script>
