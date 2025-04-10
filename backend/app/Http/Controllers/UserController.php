@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Employee;
+use App\Models\Upload;
 use Hash;
 
 class UserController extends Controller
@@ -166,5 +167,91 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User deleted successfully'
         ]);
+    }
+
+
+    ///////////
+
+    public function accountView() {
+        $user = User::with('role', 'permissions')->find(Auth::id());
+        return response()->json([
+            'user' => $user
+        ]);
+    }
+
+    public function editProfile(Request $request) {
+        try {
+            $user = User::find($request->id);
+            $validate = $request->validate([
+                'firstname' => ['string', 'nullable', 'regex:/^[A-Za-z\s]+$/'],
+                'middlename' => ['string', 'nullable', 'regex:/^[A-Za-z\s]+$/'],
+                'lastname' => ['string', 'nullable', 'regex:/^[A-Za-z\s]+$/'],
+                'age' => 'nullable|integer',
+                'gender' => 'nullable',
+                'contact' => 'nullable',
+                'address' => 'nullable|string',
+                'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
+            ]);
+            if($request->hasFile('picture')) {
+                $file = $request->file('picture');
+                $path = $file->store('images', 'public');
+                $validate['picture'] = $path;
+            }
+            $user->update($validate);
+            return response()->json([
+                'message' => 'Updated successfully'
+            ]);
+        }catch(ValidationException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function uploadFile(Request $request) {
+        try {
+            $user = User::find($request->user_id);
+            $validate = $request->validate([
+                'user_id' => 'required',
+                'name' => 'required',
+                'path' => 'required|mimes:pdf,doc,docx|max:10240'
+            ]);
+            $file = $request->file('path');
+            $path = $file->store('uploads', 'public');
+            $saveFile = Upload::create([
+                'name' => $request->name,
+                'path' => $path,
+                'user_id' => $request->user_id
+            ]);
+
+            return response()->json([
+                'message' => 'Uploaded successfully'
+            ]);
+        }catch(ValidationException $e) {
+            return response()->json([
+                'error' => 'File is required',
+            ]);
+        }
+    }
+
+    public function getFileUploads() {
+        $uploads = Upload::where('user_id', Auth::user()->id)->get();
+        return response()->json([
+            'uploads' => $uploads
+        ]);
+    }
+
+    public function removeFile(Request $request) {
+        try {
+            $file = Upload::find($request->id);
+            $file->delete();
+            return response()->json([
+                'message' => 'File deleted'
+            ]);
+        }catch(Exception $e) {
+            return response()->json([
+                'error' => 'File not found'
+            ]);
+        }
     }
 }

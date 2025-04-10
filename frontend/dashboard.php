@@ -114,5 +114,44 @@
     })
 </script>
 
+<script>
+    $.ajax({
+        url: 'http://backend-folder.test/api/admin/menus',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Accept': 'application/json'
+        },
+        success: function(data) {
+            let menuElement = document.querySelectorAll('li[id]');
+            let menuIds = [];
+            
+            menuElement.forEach(menu => {
+                if(!data.menus.find(menuCon => menuCon.name == menu.id)) {
+                    menuIds.push({
+                        name: menu.id
+                    });
+                }
+            });
+
+            if(menuIds.lenght > 0) {
+                $.ajax({
+                    url: 'http://backend-folder.test/api/admin/store-menus',
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    data: {
+                        menus: menuIds
+                    }
+                })
+            }
+        }
+    })
+
+
+</script>
+
 </body>
 </html>

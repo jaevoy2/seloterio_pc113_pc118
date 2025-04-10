@@ -81,8 +81,8 @@
             </div>
         </li>
         <li class="py-1">
-            <div class="p-2">
-                <a href="" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
+            <div class="<?= (strpos($currentPage, 'profile.php') !== false) ? 'active' : '' ?> p-2">
+                <a href="profile.php" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
                     Account Settings
                 </a>

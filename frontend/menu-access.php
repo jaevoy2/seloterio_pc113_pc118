@@ -70,13 +70,26 @@
                                     <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">Menu Access Control</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Menus</a>
                                 </li>
                             </ol>
                         </nav>
                         <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3">
                             <div class="px-3">
-
+                                <div class="position-absolute" style="width: 5px; height:30px; background-color:#fbc523; left:0; border-radius:0 3px 3px 0"></div>
+                                <div class="btn_container mb-3 d-grid d-md-flex justify-content-between align-items-center">
+                                    <h5>Manage Access</h5>
+                                    <div class="btn btn-warning px-2 addPermissionBtn fw-semibold py-1" id="addMenuPermission" data-bs-toggle="modal" data-bs-target="#addPermisssionMenu" style="font-size: 13px">Add menu permission</div>
+                                </div>
+                                <div class="pt-2 d-flex" style="gap: 200px">
+                                    <div class="d-flex flex-column gap-3">
+                                        <div class="d-flex" style="gap:345px">
+                                            <p class="text-secondary fw-semibold" style="font-size: 13px">Menus</p>
+                                            <p class="text-secondary fw-semibold" style="font-size: 13px">Permissions</p>
+                                        </div>
+                                        <div class="fw-semibold" id="menuContainer"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>  
@@ -87,6 +100,7 @@
 
 
     <?php include 'modals/logout-modal.php' ?>
+    <?php include 'modals/menu-access-modal.php' ?>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -120,3 +134,232 @@
             }, 800);
         })
     </script>
+
+    <!-- menus -->
+     <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: 'http://backend-folder.test/api/admin/menus',
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function(data) {
+                        let mainContainer = document.getElementById('menuContainer');
+                        let menuCon = document.createElement('div');
+                        menuCon.classList.add('menuCon');
+
+                        data.menus.forEach(menu => {
+                            let menu_con = document.createElement('div');
+                            menu_con.classList.add('menu-con');
+                            menu_con.innerHTML = menu.name;
+
+                            let permissionContainer = document.createElement('div');
+                            permissionContainer.classList.add('permission_container', 'd-flex', 'flex-wrap');
+
+                            if(menu.permissions) {
+                                menu.permissions.forEach(permission => {
+                                    let permissionCon = document.createElement('div');
+                                    permissionCon.classList.add('menu_permission');
+                                    permissionCon.innerHTML = permission.name;
+
+                                    let deleteIcon = document.createElement('div');
+                                    deleteIcon.classList.add('delete-icon');
+                                    deleteIcon.setAttribute('data-id', permission.id);
+                                    deleteIcon.setAttribute('data-menu', menu.id);
+                                    deleteIcon.setAttribute('data-label', permission.name);
+                                    deleteIcon.setAttribute('data-bs-toggle', 'modal');
+                                    deleteIcon.setAttribute('data-bs-target', '#deleteAccessPermission');
+                                    deleteIcon.innerHTML = `
+                                        <svg class="ms-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M18 6l-12 12" />
+                                            <path d="M6 6l12 12" />
+                                        </svg>`;
+
+                                    permissionContainer.appendChild(permissionCon);
+                                    permissionCon.appendChild(deleteIcon);
+
+                                    if(permission.name == 'Manage User' || permission.name == 'System Settings') {
+                                        deleteIcon.style.display = 'none';
+                                    }
+                                });
+                            }
+
+                            menuCon.appendChild(menu_con);
+                            menu_con.appendChild(permissionContainer);
+                        });
+                        mainContainer.appendChild(menuCon);
+                    }
+                })
+            })
+     </script>
+
+     <!-- open/close checkbox -->
+     <script>
+        function openPermissions() {
+            const checkbox = document.getElementById('menuPermissionCheckboxes');
+            checkbox.style.display = checkbox.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            const checkbox = document.getElementById('menuPermissionCheckboxes');
+            if (!checkbox.contains(target) && !target.matches('.selectBox, .selectBox *')) {
+                checkbox.style.display = 'none';
+            }
+
+        })
+    </script>
+
+    <!-- display menus and permission on modal -->
+     <script>
+        $(document).on('click', '#addMenuPermission', function() {
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/access_control',
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function(data) {
+                    let menus = data.menus;
+                    let permissions = data.permissions;
+                    let menusContainer = document.getElementById('menuOption');
+                    let permissionContainer = document.getElementById('menuPermissionCheckboxes')
+                    menusContainer.innerHTML = '';
+
+                    let defaultOption = document.createElement('option');
+                    defaultOption.text = 'Select Menu';
+                    defaultOption.value = '';
+                    defaultOption.selected = true;
+                    defaultOption.disabled = true;
+                    menusContainer.appendChild(defaultOption);
+
+                    menus.forEach(menu => {
+                        let option = document.createElement('option');
+                        option.value = menu.id;
+                        option.text = menu.name;
+                        menusContainer.appendChild(option);
+                    });
+
+                    menusContainer.addEventListener('change', function () {
+                        let selected = this.value;
+                        let selectedMenu = data.menus.find(menu => menu.id == selected);
+                        permissionContainer.innerHTML = '';
+
+                        permissions.forEach(permission => {
+                            const assigned = selectedMenu.permissions.some(perm => perm.id == permission.id);
+                            if(!assigned) {
+                                let inputContainer = document.createElement('div');
+                                inputContainer.classList.add('checkbox-container');
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.id = `checkbox${permission.id}`;
+                                checkbox.value = permission.id;
+                                checkbox.name = 'permission_id[]';
+
+                                const label = document.createElement('label');
+                                label.textContent = permission.name;
+                                label.htmlFor = `checkbox${permission.id}`;
+                                
+                                inputContainer.appendChild(checkbox);
+                                inputContainer.appendChild(label);
+                                permissionContainer.appendChild(inputContainer);
+                            }
+                        })
+                    })
+                }
+            })
+        })
+     </script>
+
+    <!-- store menu permission -->
+     <script>
+        $(document).on('click', '#saveAddedPermisisons', function(event) {
+            event.preventDefault();
+            const errorCon = document.getElementById('addMenuPermission_error');
+            const menu = $('#menuOption').val();
+            const checkedValues = $('input[name="permission_id[]"]:checked').map(function() {
+                return this.value;
+            }).get();
+
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/store-menu-permission',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    menu_id: menu,
+                    permission_id: checkedValues
+                },
+                success: function(response) {
+                    if(!response.message) {
+                        errorCon.textContent = response.error;
+                    }else {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                } 
+            })
+        })
+     </script>
+
+    <!-- remove permission -->
+     <script>
+        $(document).on('click', '.delete-icon', function() {
+            const permissionId = $(this).data("id");
+            const menuId = $(this).data("menu");
+            const permissionName = $(this).data("label");
+            const permission_name = document.getElementById('access_permission');
+            permission_name.textContent = permissionName;
+
+            $(document).on('click', '#delete_permission', function() {
+    
+                $.ajax({
+                    url: 'http://backend-folder.test/api/admin/remove-permission',
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    data: {
+                        menu_id: menuId,
+                        permission_id: permissionId
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                })
+            })
+
+        })
+
+     </script>
+
+</body>
+</html>

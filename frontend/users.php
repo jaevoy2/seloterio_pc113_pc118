@@ -390,7 +390,7 @@
                                         toast: true,
                                         title: response.message,
                                         showConfirmButton: false,
-                                        timer: 1800
+                                        timer: 1200
                                     }).then(() => {
                                         location.reload();
                                     });
@@ -570,7 +570,7 @@
                                         toast: true,
                                         title: response.message,
                                         showConfirmButton: false,
-                                        timer: 1800
+                                        timer: 1200
                                     }).then(() => {
                                         location.reload();
                                     });
@@ -606,19 +606,7 @@
                         id: id
                     },
                     success: function(response) {
-                        if(!response.message) {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: 'Failed to delete user',
-                                showConfirmButton: false,
-                                timer: 2500,
-                            });
-                        }
-                        else if(response.message) {
+                        if(response.message) {
                             Swal.fire({
                                 position: "top-end",
                                 icon: "success",
@@ -627,7 +615,7 @@
                                 toast: true,
                                 title: response.message,
                                 showConfirmButton: false,
-                                timer: 1800
+                                timer: 1200
                             }).then(() => {
                                 location.reload();
                             });

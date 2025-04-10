@@ -74,10 +74,10 @@
                                 </li>
                             </ol>
                         </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3">
-                            <div class="px-3">
+                        <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3 px-0">
+                            <div class="">
                                 <div class="">
-                                    <div class="d-flex p-3 flex-column position-relative" style="gap:100px">
+                                    <div class="d-flex p-4 flex-column position-relative" style="gap:100px">
                                         <div>
                                             <div class="btn_container mb-3 d-grid d-md-flex justify-content-between align-items-center">
                                                 <div class="position-absolute" style="width: 5px; height:30px; background-color:#fbc523; left:0; border-radius:0 3px 3px 0"></div>
@@ -233,7 +233,7 @@
                             toast: true,
                             title: response.message,
                             showConfirmButton: false,
-                            timer: 1800
+                            timer: 1200
                         }).then(() => {
                             location.reload();
                         });
@@ -275,7 +275,7 @@
                                 toast: true,
                                 title: response.message,
                                 showConfirmButton: false,
-                                timer: 1800
+                                timer: 1200
                             }).then(() => {
                                 location.reload();
                             });
@@ -315,7 +315,7 @@
                                 toast: true,
                                 title: response.message,
                                 showConfirmButton: false,
-                                timer: 1800
+                                timer: 1200
                             }).then(() => {
                                 location.reload();
                             }); 
@@ -379,7 +379,7 @@
                         permissionCon.appendChild(deleteBtn);
                         permissionContainer.appendChild(permissionCon);
 
-                        if(permission.name == 'Manage User') {
+                        if(permission.name == 'Manage User' || permission.name == 'System Settings') {
                             editPermission.style.display = 'none';
                             deleteBtn.style.display = 'none';
                         }
@@ -417,7 +417,7 @@
                             toast: true,
                             title: response.message,
                             showConfirmButton: false,
-                            timer: 1800
+                            timer: 1200
                         }).then(() => {
                             location.reload();
                         }); 
@@ -458,8 +458,8 @@
                                 width: 350,
                                 toast: true,
                                 title: response.message,
-                                showConfirmButton: false,
-                                timer: 1800
+                                showConfrmButton: false,
+                                timer: 1200
                             }).then(() => {
                                 location.reload();
                             }); 
@@ -501,7 +501,7 @@
                                 toast: true,
                                 title: response.message,
                                 showConfirmButton: false,
-                                timer: 1800
+                                timer: 1200
                             }).then(() => {
                                 location.reload();
                             }); 

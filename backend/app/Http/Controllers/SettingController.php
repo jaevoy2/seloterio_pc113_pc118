@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use App\Models\Menu;
 use App\Models\User;
 use App\Models\Role;
 
@@ -124,6 +125,76 @@ class SettingController extends Controller
             ]);
         }catch(Exception $e) {
             return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    // menus
+    public function menus() {
+        return response()->json([
+            'menus' => Menu::with('permissions')->get()
+        ]);
+    }
+
+    public function access(){
+        $menus = Menu::with('permissions')->get();
+        $permissions = Permission::all();
+        return response()->json([
+            'menus' => $menus,
+            'permissions' => $permissions
+        ]);
+    }
+
+    public function storeMenu(Request $request) {
+        $validate = $request->validate([
+            'name' => 'array',
+            'menus.*.name'
+        ]);
+        foreach ($request->menus as $menu) {
+            Menu::create([
+                'name' => $menu['name']
+            ]);
+        }
+        return response()->json([
+            'message' => 'Inserted'
+        ]);
+    }
+
+    public function storeMenuPermission(Request $request) {
+        try {
+            $validate = $request->validate([
+                'menu_id' => 'required',
+                'permission_id' => 'required'
+            ]);
+            $menu = Menu::find($request->menu_id);
+            $menu->permissions()->syncWithoutDetaching($request->permission_id);
+            return response()->json([
+                'message' => 'Added successfully'
+            ]);
+        }catch(ValidationException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function removePermission(Request $request) {
+        try {
+            $menu = Menu::find($request->menu_id);
+            $hasPermission = $menu->permissions()
+            ->wherePivot('permission_id', $request->permission_id)
+            ->exists();
+
+            if($hasPermission) {
+                $menu->permissions()->detach($request->permission_id);
+            }
+            return response()->json([
+                'message' => 'Permission removed'
+            ]);
+        }catch(Exception $e) {
+            return respons()->json([
                 'error' => $e->getMessage()
             ]);
         }

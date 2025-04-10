@@ -20,6 +20,9 @@
                     case $currentPage == '/role_permission.php':
                         echo "Role & Permission Management";
                         break;
+                    case $currentPage == '/profile.php':
+                        echo "Account Settings";
+                        break;
                 }
             ?>
         </h5>
@@ -38,7 +41,7 @@
                     </div>
                     <div class="">
                         <ul class="user-drop dropdown-menu dropdown-menu-lg-end p-0" style="border: 1px solid #e0e0e0; width:200px">
-                            <a href="" class="list-group-item user p-2">
+                            <a href="" id="profileBtn" class="list-group-item  p-2">
                                 <div id="user_name"></div>
                                 <small class="text-secondary" style="font-size: 12px">Profile</small>
                             </a>
@@ -97,6 +100,13 @@
             }
             user_name.innerHTML = data.firstname + ' ' + data.lastname;
         }
+    })
+</script>
+
+<script>
+    $(document).on('click', '#profileBtn', function(event) {
+        event.preventDefault();
+        location.href = 'http://frontend-folder.test/profile.php'
     })
 </script>
 

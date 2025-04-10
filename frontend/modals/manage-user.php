@@ -151,7 +151,7 @@
                                         <label class="input-group-text bg-warning text-dark rounded-0" for="editRole">Roles</label>
                                     </div>
                                     <select class="custom-select col-9" name="role_id" id="editRole" style="border: 1px solid #ebebeb">
-                                        {{-- edit role option --}}
+                                        <!-- {{-- edit role option --}} -->
                                     </select>
                                 </div>
                                 <div class="multiselect mb-5">
