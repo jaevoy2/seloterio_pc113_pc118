@@ -79,8 +79,11 @@
                                 <h5 class="mb-0">My Profile</h5>
                                 <div class="card top">
                                     <div class="d-flex justify-content-between p-3">
-                                        <div class="d-flex gap-3 align-items-center">
-                                            <img class="profile" src="" alt="" style="width: 80px; height:80px; border-radius:50%">
+                                        <div class="d-flex gap-5 align-items-center">
+                                            <div class="position-relative">
+                                                <img class="profile" src="" alt="" style="width: 80px; height:80px; border-radius:50%">
+                                                <svg data-bs-toggle="modal" data-bs-target="#deleteMyProfile" class="position-absolute bottom-0 text-danger" id="removeMyProfile" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                            </div>
                                             <div class="">
                                                 <div class="fullname fw-semibold"></div>
                                                 <div class="role text-secondary" style="font-size: 13px"></div>
@@ -221,6 +224,8 @@
                 success: function(data) {
                     if(data.user.picture == null) {
                         picture = 'http://backend-folder.test/storage/images/default.jpg';
+                        let trash = document.getElementById('removeMyProfile');
+                        trash.style.display = 'none';
                     }else {
                         picture = 'http://backend-folder.test/storage/' + data.user.picture;
                     }
@@ -402,7 +407,7 @@
 
                     $(document).on('click', '#saveUserProfile', function(event) {
                         event.preventDefault();
-                        const file = document.getElementById('profilePicture').value;
+                        const file = document.getElementById('profilePicture');
 
                         formData = new FormData();
                         formData.append('id', user.id);
@@ -451,5 +456,54 @@
             })
         })
       </script>
+
+    <!-- remove profile picture -->
+    <script>
+        $(document).on('click', '#removeMyProfile', function() {
+            fetch('http://backend-folder.test/api/account', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                let user = data.user;
+
+                $(document).on('click', '#deletePersonalProfile', function(event) {
+                    event.preventDefault();
+                    fetch('http://backend-folder.test/api/remove-profile', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify({id: user.id})
+                    })
+                    .then(res => res.json())
+                    .then(response => {
+                        if(!response.message) {
+                            document.getElementById('myProfile_error').textContent = response.error;
+                        }else{
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                color: "#008000",
+                                width: 350,
+                                toast: true,
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 1200
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    })
+                })
+            })
+        })
+    </script>
 
 

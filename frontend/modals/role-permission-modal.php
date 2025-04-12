@@ -39,6 +39,7 @@
                     <small class="d-flex justify-content-center text-danger" style="font-size: 12px" id="editRoleError"></small>
                         <div class="form-group my-3">
                             <small class="text-secondary mx-1" style="font-size: 12px">Role name</small>
+                            <input type="text" name="editRoleId" id="editRoleId" hidden>
                             <input type="text" id="editRoleName" class="form-control" name="roleName">
                         </div>
                     </div>
@@ -66,7 +67,7 @@
             </div>
             <div class="d-flex flex-row-reverse p-3 gap-3">
                 <form action="" method="post" id="deleteUserForm" method="POST">
-                    <input type="text" name="id" id="roleDelete" hidden>
+                    <input type="text" name="roleDeleteId" id="roleDeleteId" hidden>
                     <button type="submit" id="confirmDelete" class="btn btn-danger btn-sm">Delete</button>
                 </form>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -118,7 +119,7 @@
                     <small class="d-flex justify-content-center text-danger" style="font-size: 12px" id="editPerm_error"></small>
                     <div class="">
                         <div class="form-group my-3">
-                            <input type="text" name="id" id="permissionId" hidden>
+                            <input type="text" name="editPermissionId" id="editPermissionId" hidden>
                             <small class="text-secondary mx-1" style="font-size: 12px">Permission name</small>
                             <input type="text" id="permission_name" class="form-control" name="permission_name" required>
                         </div>
@@ -147,7 +148,7 @@
             </div>
             <div class="d-flex flex-row-reverse p-3 gap-3">
                 <form action="" method="post" id="deleteUserForm" method="POST">
-                    <input type="text" name="id" id="permissionDelete" hidden>
+                    <input type="text" name="permissionDeleteId" id="permissionDeleteId" hidden>
                     <button type="submit" id="delete_permission" class="btn btn-danger btn-sm">Delete</button>
                 </form>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>

@@ -195,7 +195,7 @@
                                             return `<div class="btn btn-warning fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`;
                                         }else if(data.name == "Managing Staff"){
                                             return `<div class="btn btn-warning fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`;
-                                        }else if(data.name == "Rider" || data.name == "Delivery Rider" || data.name == "Delivery Man"){
+                                        }else if(data.name == "Rider" || data.name == "Delivery Rider" || data.name == "Delivery Man" || data.name == "Food Delivery Rider" || data.name == "Food Rider"){
                                             return `<div class="btn btn-primary fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`;
                                         }else{
                                             return `<div class="btn btn-secondary fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`
@@ -277,6 +277,7 @@
                     'Content-Type': 'application/json'
                 },
                 success: function(response) {
+                    console.log(response.currentUser);
                     let roles = response.roles;
                     let permissions = response.permissions;
                     
@@ -294,6 +295,9 @@
                         let option = document.createElement('option');
                         option.value = role.id;
                         option.text = role.name;
+                        if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
+                            return;
+                        }
                         select.appendChild(option);
                     });
 
@@ -305,7 +309,7 @@
 
                         if(userRole.name == null) {
                             permissionContainer.style.display = 'none';
-                        }else if (userRole.name == "Rider" || userRole.name == "Delivery Rider" || userRole.name == "Unassigned") {
+                        }else if (userRole.name == "Rider" || userRole.name == "Delivery Rider" || userRole.name == "Unassigned" || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
                             permissionContainer.style.display = 'none';
                         }else{
                             permissions.forEach(permission => {
@@ -347,6 +351,10 @@
                             permissions.push(checkbox.value);
                         });
 
+                        if (role_id == null) {
+                            document.getElementById('addUser_error').textContent = 'Please select a role first';
+                        }
+
                         let formData = new FormData();
                         formData.append('firstname', firstname);
                         formData.append('middlename', middlename);
@@ -366,7 +374,6 @@
                         if(picture) {
                             formData.append('picture', picture);
                         }
-                        console.log(...formData);
                         $.ajax({
                             url: 'http://backend-folder.test/api/admin/add-user',
                             method: 'POST',
@@ -420,8 +427,8 @@
 
     </script>
 
-    <!-- populate and edit form -->
-     <script>
+    <!-- populate the form -->
+    <script>
         $(document).on('click', '.edit_user', function() {
             let userId = $(this).data("id");
             let firstname = $(this).data("firstname");
@@ -435,7 +442,7 @@
             let roleSelected = $(this).data("role");
             let picture = $(this).data("picture");
 
-            $('#editUser').find("input[name='id']").val(userId);
+            $('#editUser').find("input[name='editUserId']").val(userId);
             $('#editUser').find("input[name='firstname']").val(firstname);
             $('#editUser').find("input[name='middlename']").val(middlename);
             $('#editUser').find("input[name='lastname']").val(lastname);
@@ -444,6 +451,7 @@
             $('#editUser').find("input[name='contact']").val(contact);
             $('#editUser').find("input[name='address']").val(address);
             $('#editUser').find("input[name='email']").val(email);
+            document.getElementById('userProfileId').value = userId;
 
             $.ajax({
                 url: 'http://backend-folder.test/api/admin/users',
@@ -470,18 +478,22 @@
                         option.classList.add('selected_option');
                         option.value = role.id;
                         option.text = role.name;
+                        if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
+                            return;
+                        }
                         if(roleSelected == role.name) {
                             option.selected = true;
                         }
                         select.appendChild(option);
                     });
+                    
                     document.getElementById('editRole').addEventListener('change', function() {
                         const selectedRole = this.value;
                         const permissionContainer = document.getElementById('editCheckboxes');
                         const userRole = roles.find(role => role.id == selectedRole);
                         permissionContainer.innerHTML = '';
 
-                        if(userRole.name == 'Rider' || userRole.name == 'Delivery Rider' || userRole.name == 'Unassigned') {
+                        if(userRole.name == 'Rider' || userRole.name == 'Delivery Rider' || userRole.name == 'Unassigned' || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
                             permissionContainer.style.display = 'none';
                         }else{
                             const permissions = response.permissions;
@@ -511,120 +523,168 @@
                         }
                     });
                     document.getElementById('editRole').dispatchEvent(new Event('change'));
-
-                    $(document).on('click', '#updateBtn', function(event) {
-                        event.preventDefault();
-                        let editFname = document.getElementById('editFname').value;
-                        let editMname = document.getElementById('editMname').value;
-                        let editLname = document.getElementById('editLname').value;
-                        let editAge = document.getElementById('editAge').value;
-                        let editGender = document.getElementById('editGender').value;
-                        let editContact = document.getElementById('editContact').value;
-                        let editAddress = document.getElementById('editAddress').value;
-                        let editEmail = document.getElementById('editEmail').value;
-                        let role_id = document.getElementById('editRole').value;
-                        let picture = document.getElementById('editProfile').files[0];
-                        let permissions = [];
-                        document.querySelectorAll('.checked_permission:checked').forEach((checkbox) => {
-                            permissions.push(checkbox.value);
-                        });
-
-                        let formData = new FormData();
-                        formData.append('id', userId);
-                        formData.append('firstname', editFname);
-                        formData.append('middlename', editMname);
-                        formData.append('lastname', editLname);
-                        formData.append('age', editAge);
-                        formData.append('gender', editGender);
-                        formData.append('contact', editContact);
-                        formData.append('address', editAddress);
-                        formData.append('email', editEmail);
-                        formData.append('role_id', role_id);
-                        if(picture) {
-                            formData.append('picture', picture);
-                        }
-                        permissions.forEach(permission => {
-                            formData.append('permissions[]', permission);
-                        });
-
-                        $.ajax({
-                            url: 'http://backend-folder.test/api/admin/edit-user',
-                            method: 'POST',
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                                'Accept': 'application/json',
-                            },
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function(response) {
-                                if(!response.message) {
-                                    document.getElementById('editUser_error').textContent = response.error;
-                                }
-                                else if(response.message) {
-                                    Swal.fire({
-                                        position: "top-end",
-                                        icon: "success",
-                                        color: "#008000",
-                                        width: 350,
-                                        toast: true,
-                                        title: response.message,
-                                        showConfirmButton: false,
-                                        timer: 1200
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                }
-                            }
-                        });
-                    })
                 }
             });
         });
-     </script>
+    </script>
 
-     <!-- delete user -->
+     <!-- edit -->
     <script>
+        $(document).on('click', '#updateBtn', function(event) {
+            event.preventDefault();
+            let userId = document.getElementById('editUserId').value;           
+            let editFname = document.getElementById('editFname').value;
+            let editMname = document.getElementById('editMname').value;
+            let editLname = document.getElementById('editLname').value;
+            let editAge = document.getElementById('editAge').value;
+            let editGender = document.getElementById('editGender').value;
+            let editContact = document.getElementById('editContact').value;
+            let editAddress = document.getElementById('editAddress').value;
+            let editEmail = document.getElementById('editEmail').value;
+            let role_id = document.getElementById('editRole').value;
+            let picture = document.getElementById('editProfile').files[0];
+            let permissions = [];
+            document.querySelectorAll('.checked_permission:checked').forEach((checkbox) => {
+                permissions.push(checkbox.value);
+            });
+
+            let formData = new FormData();
+            formData.append('id', userId);
+            formData.append('firstname', editFname);
+            formData.append('middlename', editMname);
+            formData.append('lastname', editLname);
+            formData.append('age', editAge);
+            formData.append('gender', editGender);
+            formData.append('contact', editContact);
+            formData.append('address', editAddress);
+            formData.append('email', editEmail);
+            formData.append('role_id', role_id);
+            if(picture) {
+                formData.append('picture', picture);
+            }
+            permissions.forEach(permission => {
+                formData.append('permissions[]', permission);
+            });
+
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/edit-user',
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Accept': 'application/json',
+                },
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if(!response.message) {
+                        document.getElementById('editUser_error').textContent = response.error;
+                    }
+                    else if(response.message) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                }
+            });
+        })
+    </script>
+
+    <!-- populate delete modal -->
+     <script>
         $(document).on('click', '#deleteUserBtn', function() {
             let id = $(this).data("id");
             let fname = $(this).data("firstname");
             let lname = $(this).data("lastname");
 
+            document.getElementById('confirmDeleteUser').value = id;
             let nameCon = document.getElementById('user-delete');
             nameCon.textContent = fname + ' ' + lname;
 
-            $(document).on('click', '#delete_user', function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/delete-user',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        if(response.message) {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 1200
-                            }).then(() => {
-                                location.reload();
-                            });
-                        }
+        })
+     </script>
+
+     <!-- delete user -->
+    <script>
+        $(document).on('click', '#delete_user', function(event) {
+            event.preventDefault();
+            let id = document.getElementById('confirmDeleteUser').value; 
+            
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/delete-user',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    if(response.message) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        });
                     }
-                })
+                }
             })
         })
     </script>
+
+    <!-- remove profile image -->
+     <script>
+        $(document).on('click', '#confirmRemoveProfile', function(event) {
+            event.preventDefault();
+            let id = document.getElementById('userProfileId').value;
+
+            fetch('http://backend-folder.test/api/remove-profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({id: id}),
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(!response.message) {
+                    document.getElementById('profile_error').textContent = response.error;
+                }else {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        color: "#008000",
+                        width: 350,
+                        toast: true,
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1200
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            })
+        })
+     </script>
 
 
 </body>

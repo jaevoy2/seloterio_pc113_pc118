@@ -15,8 +15,22 @@
                     Dashboard
                 </a>
             </div>
-        </li>
-        <li class="p-1 mb-1" id="User Management">
+        <!-- delivery Rider menu -->
+        <div class="p-2 rider_menu" style="display: none">
+            <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+                <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-truck-delivery"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /><path d="M3 9l4 0" /></svg>
+                Deliveries
+            </a>
+        </div>
+        <!-- delivery Rider menu -->
+        <div class="p-2 rider_menu" style="display: none">
+            <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+                <svg class="me-2"  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                My Deliveries
+            </a>
+        </div>
+
+        <li class="p-1 mb-1" id="User Management" style="display: none">
             <div class="<?= (strpos($currentPage, 'users.php') !== false) ? 'active' : '' ?> p-2">
                 <a href="users.php" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2"  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
@@ -24,7 +38,7 @@
                 </a>
             </div>
         </li>
-        <li class="p-1" id="Delivery Management">
+        <li class="p-1" id="Delivery Management" style="display: none">
             <div class="p-2">
                 <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" data-bs-toggle="collapse" data-bs-target="#delivery" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
@@ -42,7 +56,7 @@
                 </a>
             </div>
         </li>
-        <li class="p-1" id="Report">
+        <li class="p-1" id="Report" style="display: none">
             <div class="p-2">
                 <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
@@ -64,7 +78,7 @@
 
     <ul class="nav settings mt-4">
         <p class="mb-1" style="font-size: 11px; font-weight:bold; color:rgb(174, 174, 174)">SETTINGS</p>
-        <li class="py-1" id="Role & Permission Manager">
+        <li class="py-1" id="Role & Permission Manager" style="display: none">
             <div class="<?= (strpos($currentPage, 'role_permission.php') !== false) ? 'active' : '' ?> p-2">
                 <a href="../role_permission.php" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>
@@ -72,7 +86,7 @@
                 </a>
             </div>
         </li>
-        <li class="py-1" id="Menu Access Control">
+        <li class="py-1" id="Menu Access Control" style="display: none">
             <div class="<?= (strpos($currentPage, 'menu-access.php') !== false) ? 'active' : '' ?> p-2">
                 <a href="menu-access.php" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-shield-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.998 2l.118 .007l.059 .008l.061 .013l.111 .034a.993 .993 0 0 1 .217 .112l.104 .082l.255 .218a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.531 -2.527l.263 -.225l.096 -.075a.993 .993 0 0 1 .217 -.112l.112 -.034a.97 .97 0 0 1 .119 -.021l.115 -.007zm.002 7a2 2 0 0 0 -1.995 1.85l-.005 .15l.005 .15a2 2 0 0 0 .995 1.581v1.769l.007 .117a1 1 0 0 0 1.993 -.117l.001 -1.768a2 2 0 0 0 -1.001 -3.732z" /></svg>
@@ -98,3 +112,38 @@
         </li> -->
     </ul>
 </nav>
+
+<script>
+    window.addEventListener("load", function() {
+        fetch('http://backend-folder.test/api/user-access', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            let userRole = response.user.role;
+            let userPermission = response.user.permissions;
+            let menuPermission = response.menu;
+
+            // console.log(userPermission);
+            menuPermission.forEach(menu => {
+                menu.permissions.forEach(permission => {
+                    userPermission.forEach(userPerm => {
+                        if (permission.name == userPerm.name) {
+                            document.getElementById(menu.name).style.display = 'block';
+                        }
+                    })
+                })
+            });
+            
+            if(userRole.name == 'Delivery Man' || userRole.name == 'Delivery Rider' || userRole.name == 'Food Delivery Rider' || userRole.name == 'Food Rider' || userRole.name == 'Rider') {
+                let riderMenu = document.querySelectorAll('.rider_menu');
+                riderMenu.forEach(menu => {
+                    menu.style.display = 'block';
+                });
+            }
+        })
+    })
+</script>

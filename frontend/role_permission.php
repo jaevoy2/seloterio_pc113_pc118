@@ -178,6 +178,7 @@
                         editRole.onclick = function() {
                             let edit_role = new bootstrap.Modal(document.getElementById('editRoleModal'));
                             $('#editRoleModal').find('input[name="roleName"]').val(role.name);
+                            $('#editRoleModal').find('input[name="editRoleId"]').val(role.id);
                             edit_role.show();   
                         }
 
@@ -188,6 +189,7 @@
                         deleteRole.onclick = function() {
                             let delete_role = new bootstrap.Modal(document.getElementById('deleteRole'));
                             document.querySelector('.roleName').textContent = role.name;
+                            $('#deleteRole').find('input[name="roleDeleteId"]').val(role.id);
                             delete_role.show();
                         }
 
@@ -242,86 +244,83 @@
             })
         })
      </script>
-     
+
      <!-- edit role -->
       <script>
-        $(document).on('click', '.editRoleBtn', function() {
-            let roleId = $(this).data("id");
-            
-            $(document).on('click', '#saveEditRole', function(event) {
-                event.preventDefault();
-                let rolename = document.getElementById('editRoleName').value;
+        $(document).on('click', '#saveEditRole', function(event) {
+            event.preventDefault();
+            let rolename = document.getElementById('editRoleName').value;
+            let roleId = document.getElementById('editRoleId').value;
+            console.log(roleId);
 
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/edit-role',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        id: roleId,
-                        name: rolename
-                    },
-                    success: function(response) {
-                        if(!response.message) {
-                            document.getElementById('editRoleError').textContent = response.error;
-                        }else {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 1200
-                            }).then(() => {
-                                location.reload();
-                            });
-                        }
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/edit-role',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    id: roleId,
+                    name: rolename
+                },
+                success: function(response) {
+                    if(!response.message) {
+                        document.getElementById('editRoleError').textContent = response.error;
+                    }else {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        });
                     }
-                })
+                }
             })
         })
       </script>
 
     <!-- delete role -->
      <script>
-        $(document).on('click', '.deleteBtn', function() {
-            let userId = $(this).data("id");
+        $(document).on('click', '#confirmDelete', function(event) {
+            event.preventDefault();
+            let id = document.getElementById('roleDeleteId').value;
+            console.log(id);
 
-            $(document).on('click', '#confirmDelete', function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/delete-role',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        id : userId
-                    },
-                    success: function(response) {
-                        if(!response.message) {
-                            document.getElementById('deleteRoleError').textContent = response.error;
-                        }else {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 1200
-                            }).then(() => {
-                                location.reload();
-                            }); 
-                        }
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/delete-role',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    id : id
+                },
+                success: function(response) {
+                    if(!response.message) {
+                        document.getElementById('deleteRoleError').textContent = response.error;
+                    }else {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        }); 
                     }
-                })
+                }
             })
         })
      </script>
@@ -362,6 +361,7 @@
                         editPermission.onclick = function() {
                             let edit_permission = new bootstrap.Modal(document.getElementById('editPermission'));
                             $('#editPermission').find('input[name="permission_name"]').val(permission.name);
+                            $('#editPermission').find('input[name="editPermissionId"]').val(permission.id);
                             edit_permission.show();   
                         }
 
@@ -372,6 +372,7 @@
                         deleteBtn.onclick = function() {
                             let delete_permission = new bootstrap.Modal(document.getElementById('deletePermission'));
                             document.querySelector('.permissionName').textContent = permission.name;
+                            $('#deletePermission').find('input[name="permissionDeleteId"]').val(permission.id);
                             delete_permission.show();
                         }
 
@@ -429,85 +430,81 @@
 
     <!-- edit permission -->
      <script>
-        $(document).on('click', '.editBtn', function() {
-            let id = $(this).data('id');
-            
-            $(document).on('click', '#saveEditPermission', function(event) {
-                event.preventDefault();
-                let perm_name = document.getElementById('permission_name').value;
+        $(document).on('click', '#saveEditPermission', function(event) {
+            event.preventDefault();
+            let perm_name = document.getElementById('permission_name').value;
+            let id = document.getElementById('editPermissionId').value;
 
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/edit-permission',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        id: id,
-                        name: perm_name
-                    },
-                    success: function(response) {
-                        if(!response.message) {
-                            document.getElementById('editPerm_error').textContent = response.error;
-                        }else {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: response.message,
-                                showConfrmButton: false,
-                                timer: 1200
-                            }).then(() => {
-                                location.reload();
-                            }); 
-                        }
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/edit-permission',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    id: id,
+                    name: perm_name
+                },
+                success: function(response) {
+                    if(!response.message) {
+                        document.getElementById('editPerm_error').textContent = response.error;
+                    }else {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        }); 
                     }
-                })
+                }
             })
         })
      </script>
 
     <!-- delete permission -->
      <script>
-        $(document).on('click', '.deleteBtn', function() {
-            let id = $(this).data('id');
+        $(document).on('click', '#delete_permission', function(event) {
+            event.preventDefault();
+            
+            let id = document.getElementById('permissionDeleteId').value;
+            console.log(id);
 
-            $(document).on('click', '#delete_permission', function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/delete-permission',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        console.log(id);
-                        if(!response.message) {
-                            document.getElementById('deletePerm_error').textContent = response.error;
-                        }else {
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                color: "#008000",
-                                width: 350,
-                                toast: true,
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 1200
-                            }).then(() => {
-                                location.reload();
-                            }); 
-                        }
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/delete-permission',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    console.log(id);
+                    if(!response.message) {
+                        document.getElementById('deletePerm_error').textContent = response.error;
+                    }else {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            color: "#008000",
+                            width: 350,
+                            toast: true,
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        }).then(() => {
+                            location.reload();
+                        }); 
                     }
-                })
+                }
             })
         })
      </script>

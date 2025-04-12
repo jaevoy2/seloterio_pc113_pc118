@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Menu;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Employee;
@@ -30,16 +31,28 @@ class UserController extends Controller
 
     public function showUsers() {
         try {
+            $currentUser = User::with('role')->find(Auth::id());
+
+            if($currentUser->role->name =='Admin'){
+                $users = User::with('role', 'permissions')
+                ->where('role_id', '!=', 1)->get();
+            }else{
+                $users = User::with('role', 'permissions')
+                ->where('role_id', '!=', 1)
+                ->where('role_id', '!=', $currentUser->role_id)
+                ->get();
+            }
+
             $permissions = Permission::all();
             $roles = Role::all();
-            $users = User::with('role', 'permissions')
-            ->where('role_id', '!=', 1)->get();
 
             return response()->json([
                 'users' => $users,
+                'currentUser' => $currentUser->role->name,
                 'permissions' => $permissions,
                 'roles' => $roles
             ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Internal Server Error',
@@ -102,7 +115,7 @@ class UserController extends Controller
                 'address' => 'required|string',
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
-                'role_id' => 'integer',
+                'role_id' => 'required',
                 'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
             ]);
             if($request->hasFile('picture')) {
@@ -130,14 +143,14 @@ class UserController extends Controller
         try {
             $user = User::find($request->id);
             $validate = $request->validate([
-                'firstname' => ['string', 'regex:/^[A-Za-z\s]+$/'],
-                'middlename' => ['string', 'regex:/^[A-Za-z\s]+$/'],
-                'lastname' => ['string', 'regex:/^[A-Za-z\s]+$/'],
-                'age' => 'integer',
-                'gender',
-                'contact',
-                'address' => 'string',
-                'role_id' => 'integer',
+                'firstname' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
+                'middlename' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
+                'lastname' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
+                'age' => 'nullable|integer',
+                'gender' => 'nullable',
+                'contact' => 'nullable',
+                'address' => 'nullable|string',
+                'role_id' => 'nullable|integer',
                 'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
             ]);
             if($request->hasFile('picture')) {
@@ -147,8 +160,14 @@ class UserController extends Controller
             }
             $user->update($validate);
 
+            if($user->role && in_array($user->role->name, ['Unassigned', 'Rider', 'Delivery Rider'])) {
+                $user->permissions()->detach();
+            }
+
             if($request->permissions) {
                 $user->permissions()->sync($request->permissions);
+            }else{
+                $user->permissions()->detach();
             }
             return response()->json([
                 'message' => 'User updated successfully'
@@ -156,6 +175,20 @@ class UserController extends Controller
         }catch(ValidationException $e) {
             return response()->json([
                 'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function removeProfileImage(Request $request) {
+        try {
+            $user = User::find($request->id);
+            $user->update(['picture' => null]);
+            return response()->json([
+                'message' => 'Profile removed'
+            ]);
+        }catch(Exception $e) {
+            return response()->json([
+                'error' => $request
             ]);
         }
     }
@@ -253,5 +286,17 @@ class UserController extends Controller
                 'error' => 'File not found'
             ]);
         }
+    }
+
+
+    //////////
+
+    public function userMenuAccess() {
+        $user = User::with('permissions', 'role')->find(Auth::id());
+        $menu = Menu::with('permissions')->get();
+        return response()->json([
+            'user' => $user,
+            'menu' => $menu
+        ]);
     }
 }

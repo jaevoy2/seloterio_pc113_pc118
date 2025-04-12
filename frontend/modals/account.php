@@ -113,3 +113,28 @@
     </div>
 </div>
 
+
+<!-- remove my profile -->
+<div class="modal fade" id="deleteMyProfile" tabindex="-1">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"  style="font-size: 13px">
+                <div class="input-group mb-3" style="width: 100%">
+                    <small class="d-flex justify-content-center mb-2 text-danger" style="font-size: 12px" id="myProfile_error"></small>
+                    <form action="" style="width: 100%" method="post" id="" method="POST">
+                        Are you sure you want to delete this image?
+                    </form>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse p-3 gap-3">
+                <button type="submit" id="deletePersonalProfile" class="btn btn-danger btn-sm">Delete</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+

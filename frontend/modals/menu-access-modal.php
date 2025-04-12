@@ -52,6 +52,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="font-size: 13px">
+                <input type="text" id="removeMenuId" hidden>
+                <input type="text" id="removePermissionId" hidden>
                 Are you sure you want to remove <strong id="access_permission"></strong> permission?
             </div>
             <div class="d-flex flex-row-reverse p-3 gap-3">

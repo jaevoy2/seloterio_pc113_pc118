@@ -20,8 +20,8 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         try{
-            $user = Auth::user();
-                if($user->role_id == '1'){
+            $user = User::with('permissions')->find(Auth::id());
+                if($user->permissions[0]->name == 'Manage User'){
                     return $next($request);
                 }else{
                     return response()->json(['message' => 'Unauthorized'], 401);

@@ -18,8 +18,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/currentUser', [UserController::class, 'currentUser']);
-
 Route::middleware(['permission', 'preventBackHistory'])->group(function() {
     Route::get('/index', [UserController::class, 'index']);
 
@@ -38,18 +36,21 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
         Route::post('/save-permission', [SettingController::class, 'savePermission'])->middleware('admin');
         Route::post('/edit-permission', [SettingController::class, 'editPermission'])->middleware('admin');
         Route::post('/delete-permission', [SettingController::class, 'removePermisison'])->middleware('admin');
-        Route::get('/menus', [SettingController::class, 'menus'])->middleware('admin');
+        Route::get('/menus', [SettingController::class, 'menus']);
         Route::post('/store-menus', [SettingController::class, 'storeMenu'])->middleware('admin');
         Route::get('access_control', [SettingController::class, 'access'])->middleware('admin');
         Route::post('/store-menu-permission', [SettingController::class, 'storeMenuPermission'])->middleware('admin');
         Route::post('/remove-permission', [SettingController::class, 'removePermission'])->middleware('admin');
     });
 
+    Route::get('/currentUser', [UserController::class, 'currentUser']);
     Route::post('/edit-profile', [UserController::class, 'editProfile']);
+    Route::post('/remove-profile', [UserController::class, 'removeProfileImage']);
     Route::post('/uploadFile', [UserController::class, 'uploadFile']);
     Route::get('/getFileUploads', [UserController::class, 'getFileUploads']);
     Route::post('/remove-file', [UserController::class, 'removeFile']);
     Route::get('/account', [UserController::class, 'accountView']);
+    Route::get('/user-access', [UserController::class, 'userMenuAccess']);
 
 
     // sir marnie activity

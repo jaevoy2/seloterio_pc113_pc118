@@ -318,47 +318,54 @@
         })
      </script>
 
-    <!-- remove permission -->
-     <script>
+     <!-- populate remove modal -->
+    <script>
         $(document).on('click', '.delete-icon', function() {
             const permissionId = $(this).data("id");
             const menuId = $(this).data("menu");
             const permissionName = $(this).data("label");
             const permission_name = document.getElementById('access_permission');
+
+            document.getElementById('removePermissionId').value = permissionId;
+            document.getElementById('removeMenuId').value = menuId
             permission_name.textContent = permissionName;
-
-            $(document).on('click', '#delete_permission', function() {
-    
-                $.ajax({
-                    url: 'http://backend-folder.test/api/admin/remove-permission',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        menu_id: menuId,
-                        permission_id: permissionId
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-                })
-            })
-
         })
+    </script>
 
+    <!-- remove permission -->
+     <script>
+        $(document).on('click', '#delete_permission', function() {
+            const permissionId = document.getElementById('removePermissionId').value;
+            const menuId = document.getElementById('removeMenuId').value;
+            console.log(menuId, permissionId);
+
+            $.ajax({
+                url: 'http://backend-folder.test/api/admin/remove-permission',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                data: {
+                    menu_id: menuId,
+                    permission_id: permissionId
+                },
+                success: function(response) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        color: "#008000",
+                        width: 350,
+                        toast: true,
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1200
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            })
+        })
      </script>
 
 </body>
