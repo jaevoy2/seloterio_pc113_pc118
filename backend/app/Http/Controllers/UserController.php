@@ -7,6 +7,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Mail\SendCredentials;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Menu;
@@ -118,6 +120,8 @@ class UserController extends Controller
                 'role_id' => 'required',
                 'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
             ]);
+            $password = $request->password;
+
             if($request->hasFile('picture')) {
                 $file = $request->file('picture');
                 $path = $file->store('images', 'public');
@@ -128,6 +132,7 @@ class UserController extends Controller
             if($request->permissions) {
                 $user->permissions()->sync($request->permissions);
             }
+            Mail::to($user->email)->send(new SendCredentials($user->email, $password, $request->firstname));
             return response()->json([
                 'message' => 'User added successfully'
             ]);
@@ -208,7 +213,8 @@ class UserController extends Controller
     public function accountView() {
         $user = User::with('role', 'permissions')->find(Auth::id());
         return response()->json([
-            'user' => $user
+            'user' => $user,
+            'password' =>$user->password
         ]);
     }
 
@@ -223,12 +229,16 @@ class UserController extends Controller
                 'gender' => 'nullable',
                 'contact' => 'nullable',
                 'address' => 'nullable|string',
+                'password' => 'nullable',
                 'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
             ]);
             if($request->hasFile('picture')) {
                 $file = $request->file('picture');
                 $path = $file->store('images', 'public');
                 $validate['picture'] = $path;
+            }
+            if($request->password) {
+                $validate['password'] = bcrypt($request->password);
             }
             $user->update($validate);
             return response()->json([

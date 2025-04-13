@@ -8,6 +8,8 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PracticeOrder;
+use App\Models\Order;
 
 
 
@@ -52,6 +54,10 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
     Route::get('/account', [UserController::class, 'accountView']);
     Route::get('/user-access', [UserController::class, 'userMenuAccess']);
 
+    Route::get('/orders', function() {
+        $orders = Order::all();
+        return response()->json($orders);
+    });
 
     // sir marnie activity
     Route::prefix('employee')->group(function() {
@@ -70,5 +76,13 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
     });
     Route::get('/limit', [ListController::class, 'limit']);
 });
+
+
+Route::get('/practice-order', function() {
+    $orders =  PracticeOrder::where('status', 'to_be_deliver')->get();
+    return response()->json($orders);
+});
+
+
 
 

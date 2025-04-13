@@ -9,6 +9,7 @@
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <small class="d-flex justify-content-center text-danger mb-2" style="font-size: 12px" id="addUser_error"></small>
+                    <small class="mb-3 d-flex gap-1" style="font-size: 11px;"><span class="fw-bold">Note: </span>Selecting the Rider role will disable permission option and will have access to delivery functions only.</small>
                     <div class="d-flex gap-5">
                         <div class="col-6">
                             <div class="form-group mb-3">
@@ -51,7 +52,6 @@
                                 </select>
                             </div>
                             <div class="multiselect mb-3">
-                                <small class="mb-3 d-flex gap-1" style="font-size: 11px;"><span class="fw-bold">Note: </span>Selecting the Rider role will disable permission option and will have access to delivery functions only.</small>
                                 <div class="selectBox" onclick="toggleCheckboxes()">
                                     <select class="text-secondary" name=""  style="border: 1px solid #d0d0d0; border-radius: 5px"  id="">
                                         <option value="">Select Permission</option>
@@ -78,7 +78,12 @@
                     </div>
                     <div class="d-flex justify-content-end p-3 gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="register" class="btn btn-warning">Register</button>
+                    <button type="submit" id="register" class="btn btn-warning d-flex align-items-center gap-2">
+                        Register
+                        <div class="spinner-border spinner-border-sm" id="registerSpinner" style="display: none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                     </div>
                 </form>
             </div>
@@ -147,9 +152,13 @@
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                 </div>
                             </div>
+                            <!-- <div class="form-group mb-3">
+                                <small class="text-secondary" style="font-size: 12px">Update Current Password</small>
+                                <input type="password" placeholder="Password" id="editPassword" class="form-control" name="password">
+                            </div> -->
                             <div class="form-group mb-3">
                                 <small class="text-secondary" style="font-size: 12px">Email</small>
-                                <input type="email" placeholder="Email" id="editEmail" class="form-control" name="email" required>
+                                <input type="email" placeholder="Email" id="editEmail" class="form-control" name="email" >
                             </div>
                             <div class="input-group mb-3" id="">
                                 <div class="input-group-prepend">
@@ -174,7 +183,12 @@
                     </div>
                     <div class="d-flex justify-content-end p-3 gap-2">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-warning" id="updateBtn">Update</button>
+                    <button type="submit" class="btn btn-warning d-flex align-items-center gap-2" id="updateBtn">
+                        Update
+                        <div class="spinner-border spinner-border-sm" id="editSpinner" style="display: none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                     </div>
                 </form>
             </div>
@@ -197,7 +211,12 @@
             <div class="d-flex flex-row-reverse p-3 gap-3">
                 <form action="" method="post" id="deleteUserForm" method="POST">
                     <input type="text" id="confirmDeleteUser" hidden>
-                    <button type="submit" id="delete_user" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="submit" id="delete_user" class="btn btn-danger btn-sm d-flex gap-2 align-items-center">
+                        Delete
+                        <div class="spinner-border spinner-border-sm" id="deleteUserSpinner" style="display: none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                 </form>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
@@ -220,7 +239,12 @@
             <div class="d-flex flex-row-reverse p-3 gap-3">
                 <form action="" method="post" method="POST">
                     <input type="text" id="userProfileId" hidden>
-                    <button type="submit" id="confirmRemoveProfile" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="submit" id="confirmRemoveProfile" class="btn btn-danger btn-sm d-flex align-items-center gap-2">
+                        Delete
+                        <div class="spinner-border spinner-border-sm" id="deleteProfileSpinner" style="display: none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                 </form>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>

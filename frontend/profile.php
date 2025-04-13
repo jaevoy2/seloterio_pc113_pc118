@@ -418,6 +418,8 @@
                         formData.append('gender', $('#editProfile').find("select[name='gender']").val());
                         formData.append('contact', $('#editProfile').find("input[name='contact']").val());
                         formData.append('address', $('#editProfile').find("input[name='address']").val());
+                        formData.append('password', $('#editProfile').find("input[name='password']").val());
+
                         if(file && file.files.length > 0){
                             formData.append('picture', file.files[0]);
                         }

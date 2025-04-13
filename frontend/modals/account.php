@@ -47,11 +47,19 @@
                                 <small class="text-socondary" style="font-size: 12px">Address</small>
                                 <input type="text" placeholder="Address" id="profileAddress" class="form-control" name="address" required>
                             </div>
-                            <div class="input-group mb-4">
+                            <div class="form-group mb-4">
+                                <small class="text-secondary" style="font-size: 12px">Email</small>
+                                <input type="email" placeholder="Email" id="profileEmail" class="form-control" name="email" required>
+                            </div>
+                            <div class="input-group mb-3">
                                 <div class="">
                                 <label class="text-secondary" for="profile" style="font-size: 12px">Update profile image</label>
                                 </div>
                                 <input type="file" class="dropify"  data-height="100" name="picture" id="profilePicture"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <small class="text-secondary" style="font-size: 12px">Update Current Password</small>
+                                <input type="password" placeholder="Password" id="profilePass" class="form-control" name="password" required>
                             </div>
                         </div>
                     </div>
@@ -91,16 +99,16 @@
 </div>
 
 <!-- remove file -->
-<div class="modal fade" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteModalLabel">
+<div class="modal fade" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModal">
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Remove File</h5>
+                <h5 class="modal-title" id="deleteFileModal">Remove File</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body"  style="font-size: 13px">
                 <div class="input-group mb-3" style="width: 100%">
-                    <form action="" style="width: 100%" method="post" id="" method="POST">
+                    <form action="" style="width: 100%" method="post" method="POST">
                         Are you sure you want to delete this file?
                     </form>
                 </div>
@@ -125,7 +133,7 @@
             <div class="modal-body"  style="font-size: 13px">
                 <div class="input-group mb-3" style="width: 100%">
                     <small class="d-flex justify-content-center mb-2 text-danger" style="font-size: 12px" id="myProfile_error"></small>
-                    <form action="" style="width: 100%" method="post" id="" method="POST">
+                    <form action="" style="width: 100%" method="post" method="POST">
                         Are you sure you want to delete this image?
                     </form>
                 </div>

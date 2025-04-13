@@ -77,8 +77,24 @@
                         <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3 user-table">
                             <div class="btn_container d-grid d-md-flex justify-content-between align-items-center">
                                 <button type="button" id="submitId" class="btn btn-primary add-user fw-semibold text-dark" data-bs-toggle="modal" data-bs-target="#addUser">Add user</button>
+                                <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
+                                    <div class="" data-bs-toggle="dropdown" aria-expanded="false" >
+                                        <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                    </div>
+
+                                    <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" href="#">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-export"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>
+                                        Export PDF
+                                    </a></li>
+                                    <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" id="printTable" href="#">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                                        Print
+                                    </a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="pt-2">
+                            <div class="pt-2" id="printTableCon">
                                 <table id="usersTable" class="stripe hover">
                                     <thead class="text-dark " style="background-color: #ffbf00;">
                                         <tr>
@@ -335,6 +351,8 @@
                     
                     $(document).on('click', '#register', function(event) {
                         event.preventDefault();
+                        document.getElementById('registerSpinner').style.display = 'block';
+
                         let firstname = document.getElementById('firstname').value;
                         let middlename = document.getElementById('middlename').value;
                         let lastname = document.getElementById('lastname').value;
@@ -353,6 +371,8 @@
 
                         if (role_id == null) {
                             document.getElementById('addUser_error').textContent = 'Please select a role first';
+                            document.getElementById('registerSpinner').style.display = 'none';
+                            return;
                         }
 
                         let formData = new FormData();
@@ -403,6 +423,9 @@
                                     });
                                 }
 
+                            },
+                            complete: function() {
+                                document.getElementById('registerSpinner').style.display = 'none';
                             }
                         })
                     })
@@ -532,6 +555,8 @@
     <script>
         $(document).on('click', '#updateBtn', function(event) {
             event.preventDefault();
+            document.getElementById('editSpinner').style.display = 'block';
+
             let userId = document.getElementById('editUserId').value;           
             let editFname = document.getElementById('editFname').value;
             let editMname = document.getElementById('editMname').value;
@@ -594,6 +619,9 @@
                             location.reload();
                         });
                     }
+                },
+                complete: function() {
+                    document.getElementById('editSpinner').style.display = 'none';
                 }
             });
         })
@@ -617,6 +645,7 @@
     <script>
         $(document).on('click', '#delete_user', function(event) {
             event.preventDefault();
+            document.getElementById('deleteUserSpinner').style.display = 'block';
             let id = document.getElementById('confirmDeleteUser').value; 
             
             $.ajax({
@@ -644,6 +673,9 @@
                             location.reload();
                         });
                     }
+                },
+                complete: function() {
+                    document.getElementById('deleteUserSpinner').style.display = 'none';
                 }
             })
         })
@@ -653,6 +685,7 @@
      <script>
         $(document).on('click', '#confirmRemoveProfile', function(event) {
             event.preventDefault();
+            document.getElementById('deleteProfileSpinner').style.display = 'block';
             let id = document.getElementById('userProfileId').value;
 
             fetch('http://backend-folder.test/api/remove-profile', {
@@ -683,8 +716,18 @@
                     });
                 }
             })
+            .finally(() => {
+                document.getElementById('deleteProfileSpinner').style.display = 'none';
+            })
         })
      </script>
+
+     <!-- print table -->
+      <script>
+        $(document).on('click', '#printTable', function() {
+            window.open('partials/print-users.php', '_blank');
+        })
+      </script>
 
 
 </body>

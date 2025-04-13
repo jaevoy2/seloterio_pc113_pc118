@@ -23,6 +23,12 @@
                     case $currentPage == '/profile.php':
                         echo "Account Settings";
                         break;
+                    case $currentPage == '/manage-orders.php':
+                        echo "Manage Orders";
+                        break;
+                    case $currentPage == '/deliveries.php':
+                        echo "Deliveries";
+                        break;
                 }
             ?>
         </h5>

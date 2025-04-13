@@ -45,12 +45,12 @@
                     Delivery Management
                 </a>
             </div>
-            <div class="collapse report" style="background-color: #efefef; border-radius:5px" id="delivery">
-                <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+            <div class="collapse report drop_down" style="background-color:rgb(222, 222, 222); border-radius:5px" id="delivery">
+                <a href="manage-orders.php" class="sub_menu <?= (strpos($currentPage, 'manage-orders.php') !== false) ? 'active' : '' ?> p-2 nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sort-ascending-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 9l3 -3l3 3" /><path d="M5 5m0 .5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5z" /><path d="M5 14m0 .5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5z" /><path d="M17 6v12" /></svg>
                     Manage Orders
                 </a>
-                <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+                <a href="deliveries.php" class="sub_menu <?= (strpos($currentPage, 'deliveries.php') !== false) ? 'active' : '' ?> p-2 nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-truck-delivery"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /><path d="M3 9l4 0" /></svg>
                     Deliveries
                 </a>
@@ -63,7 +63,7 @@
                     Reports
                 </a>
             </div>
-            <div class="collapse report" style="background-color: #efefef; border-radius:5px" id="collapseExample">
+            <div class="collapse report drop_down" style="background-color: rgb(222, 222, 222); border-radius:5px" id="collapseExample">
                 <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 17v-5" /><path d="M12 17v-1" /><path d="M15 17v-3" /></svg>
                     Delivery Reports
@@ -143,6 +143,17 @@
                 riderMenu.forEach(menu => {
                     menu.style.display = 'block';
                 });
+            }
+        })
+    })
+</script>
+
+
+<script>
+    window.addEventListener("load", function() {
+        $('.drop_down').each(function() {
+            if ($(this). find('.active').length) {
+                $(this).removeClass('collapse');
             }
         })
     })
