@@ -36,10 +36,10 @@ class UserController extends Controller
             $currentUser = User::with('role')->find(Auth::id());
 
             if($currentUser->role->name =='Admin'){
-                $users = User::with('role', 'permissions')
+                $users = User::with('role')
                 ->where('role_id', '!=', 1)->get();
             }else{
-                $users = User::with('role', 'permissions')
+                $users = User::with('role')
                 ->where('role_id', '!=', 1)
                 ->where('role_id', '!=', $currentUser->role_id)
                 ->get();
@@ -51,7 +51,6 @@ class UserController extends Controller
             return response()->json([
                 'users' => $users,
                 'currentUser' => $currentUser->role->name,
-                'permissions' => $permissions,
                 'roles' => $roles
             ], 200);
 
@@ -128,11 +127,8 @@ class UserController extends Controller
                 $validate['picture'] = $path;
             }
             $user = User::create($validate);
-
-            if($request->permissions) {
-                $user->permissions()->sync($request->permissions);
-            }
             Mail::to($user->email)->send(new SendCredentials($user->email, $password, $request->firstname));
+
             return response()->json([
                 'message' => 'User added successfully'
             ]);
@@ -165,15 +161,6 @@ class UserController extends Controller
             }
             $user->update($validate);
 
-            if($user->role && in_array($user->role->name, ['Unassigned', 'Rider', 'Delivery Rider'])) {
-                $user->permissions()->detach();
-            }
-
-            if($request->permissions) {
-                $user->permissions()->sync($request->permissions);
-            }else{
-                $user->permissions()->detach();
-            }
             return response()->json([
                 'message' => 'User updated successfully'
             ]);
@@ -211,7 +198,7 @@ class UserController extends Controller
     ///////////
 
     public function accountView() {
-        $user = User::with('role', 'permissions')->find(Auth::id());
+        $user = User::with('role')->find(Auth::id());
         return response()->json([
             'user' => $user,
             'password' =>$user->password
@@ -229,7 +216,7 @@ class UserController extends Controller
                 'gender' => 'nullable',
                 'contact' => 'nullable',
                 'address' => 'nullable|string',
-                'password' => 'nullable',
+                // 'password' => 'nullable',
                 'picture' => 'nullable|mimes:png,jpg,jpeg|max:5400',
             ]);
             if($request->hasFile('picture')) {
@@ -302,10 +289,11 @@ class UserController extends Controller
     //////////
 
     public function userMenuAccess() {
-        $user = User::with('permissions', 'role')->find(Auth::id());
+        $user = Auth::user();
+        $role = $user->role()->with('permissions')->first();
         $menu = Menu::with('permissions')->get();
         return response()->json([
-            'user' => $user,
+            'user' => $role,
             'menu' => $menu
         ]);
     }

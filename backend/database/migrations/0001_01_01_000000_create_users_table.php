@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->string('gender')->nullable();
             $table->string('contact')->nullable();
+            $table->string('status')->nullable();
             $table->foreignId('role_id');
             $table->string('email')->unique();
             $table->string('password');

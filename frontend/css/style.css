@@ -264,6 +264,25 @@ body{
     transform: scale(0.88);
     transition: .2s;
 }
+.underline_fucos{
+    border: none;
+    border-bottom: 1px solid rgb(208, 208, 208); /* change color as needed */
+    border-radius: 0;
+    outline: none;
+    padding: 5px 10px;
+    background-color: transparent;
+    width: 100%;
+    font-size: 15px;
+}
+
+.underline_fucos:focus {
+    border-bottom: 2px solid #ffbf00; /* darker shade on focus */
+    box-shadow: none;
+}
+input[type="checkbox"]:checked {
+    accent-color: #ffbf00; /* change to any color you like */
+}
+
 
 
 

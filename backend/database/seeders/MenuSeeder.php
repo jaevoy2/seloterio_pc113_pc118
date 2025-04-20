@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\PracticeOrder;
+use App\Models\Menu;
 
-class PracticeOrderSeeder extends Seeder
+class MenuSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        PracticeOrder::factory(10)->create();
+        Menu::factory(4)->create();
     }
 }

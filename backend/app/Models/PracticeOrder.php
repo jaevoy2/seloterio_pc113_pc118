@@ -12,7 +12,7 @@ class PracticeOrder extends Model
     protected $fillable = [
         'customer_name',
         'product',
-        'description',
+        'address',
         'price',
         'status'
     ];

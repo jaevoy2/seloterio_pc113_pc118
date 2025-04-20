@@ -20,9 +20,11 @@ class PracticeOrderFactory extends Factory
         return [
             'customer_name' => $this->faker->name(),
             'product' => $this->faker->word(),
-            'description' => $this->faker->sentence(),
-            'price' => $this->faker->randomFloat(2, 10, 9999),
-            'status' => 'to_be_deliver', // Fixed value
+            'address' => $this->faker->address(),
+            'price' => $this->faker->randomFloat(2, 50, 1000),
+            'status' => 'to_be_deliver',
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

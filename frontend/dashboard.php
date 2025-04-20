@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -114,7 +114,7 @@
     })
 </script>
 
-<script>
+<!-- <script>
     $.ajax({
         url: 'http://backend-folder.test/api/admin/menus',
         method: 'GET',
@@ -134,7 +134,7 @@
                 }
             });
 
-            if(menuIds.lenght > 0) {
+            if(menuIds.length > 0) {
                 $.ajax({
                     url: 'http://backend-folder.test/api/admin/store-menus',
                     method: 'POST',
@@ -151,7 +151,7 @@
     })
 
 
-</script>
+</script> -->
 
 </body>
 </html>

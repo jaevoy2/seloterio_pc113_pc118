@@ -24,10 +24,19 @@
                         echo "Account Settings";
                         break;
                     case $currentPage == '/manage-orders.php':
-                        echo "Manage Orders";
+                        echo "Delivery Assignment";
                         break;
                     case $currentPage == '/deliveries.php':
                         echo "Deliveries";
+                        break;
+                    case $currentPage == '/add-role.php':
+                        echo "Add Role";
+                        break;
+                    case $currentPage == '/edit-role.php':
+                        echo "Edit Role";
+                        break;
+                    case $currentPage == '/my-delivery.php':
+                        echo "My Deliveries";
                         break;
                 }
             ?>

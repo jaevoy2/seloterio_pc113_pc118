@@ -70,7 +70,7 @@
                                     <a class="text-decoration-none text-dark" style="font-size: 13px" href="role_permission.php">Roles and Permissions</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Add Role</a>
                                 </li>
                             </ol>
                         </nav>
@@ -81,11 +81,31 @@
                                         <div>
                                             <div class="btn_container mb-3 d-flex justify-content-between align-items-center">
                                                 <div class="position-absolute" style="width: 5px; height:30px; background-color:#fbc523; left:0; border-radius:0 3px 3px 0"></div>
-                                                <h5>Roles</h5>
-                                                <a href="add-role.php" class="btn btn-sm fw-semibold" style="background-color: #ffbf00">Add role</a>
+                                                <h5>Add Role</h5>
                                             </div>
                                             <div class="pt-2">
-                                                <div class="d-flex flex-wrap align-items-center gap-3 p-3 fw-bold" style="font-size: 12px; min-height: 100px; background: #f1f1f1; border-radius:10px" id="roleWrapper"></div>
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    <div class="">
+                                                        <small class="d-flex justify-content-center text-danger" style="font-size: 12px" id="roleError"></small>
+                                                        <div class="form-group my-3">
+                                                            <small class="text-secondary mx-1" style="font-size: 12px">Role name</small>
+                                                            <input type="text" id="role_name" style="font-size: 15px" class="form-control underline_fucos" name="name">
+                                                        </div>
+                                                        <div class="mt-3">
+                                                            <h6>Permissions</h6>
+                                                            <div class="d-flex flex-wrap gap-5 mt-2 p-3" style="background-color: #ebeced; border-radius: 5px; font-size: 13px" id="permissionContainer"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end p-3 gap-2">
+                                                        <a href="role_permission.php" class="btn btn-secondary">Back</a>
+                                                        <button type="submit" id="saveRole" class="btn btn-warning d-flex align-items-center gap-2">
+                                                            Save
+                                                            <div class="spinner-border spinner-border-sm" id="editSpinner" style="display: none" role="status">
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -100,12 +120,10 @@
 
 
     <?php include 'modals/logout-modal.php' ?>
-    <?php include 'modals/role-permission-modal.php' ?>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    <!-- prevent back -->
+<!-- prevent back -->
     <script>
         const token = localStorage.getItem('token');
         if(!token) {
@@ -120,7 +138,7 @@
         }
     </script>
 
-    <!-- preloader -->
+<!-- preloader -->
     <script>
         window.addEventListener("load", function() {
             setTimeout(() => {
@@ -135,80 +153,71 @@
         })
     </script>
 
-    <!-- roles -->
-     <script>
+<!-- display role permission -->
+    <script>
         $(document).ready(function() {
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/roles-permissions',
+            fetch('http://backend-folder.test/api/admin/roles-permissions', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                },
-                success: function(data) {
-                    let roleContainer = document.getElementById('roleWrapper');
-                    data.roles.forEach(role => {
-                        let roleCon = document.createElement('div');
-                        roleCon.classList.add('role-item');
-                        roleCon.textContent = role.name;
-
-                        let editRole = document.createElement('a');
-                        editRole.classList.add('editRoleBtn', 'px-1');
-                        editRole.style.color = 'black';
-                        editRole.href = `http://frontend-folder.test/edit-role.php?id=${role.id}`;
-                        editRole.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>';
-                        // editRole.onclick = function() {
-                        //     let edit_role = new bootstrap.Modal(document.getElementById('editRoleModal'));
-                        //     $('#editRoleModal').find('input[name="roleName"]').val(role.name);
-                        //     $('#editRoleModal').find('input[name="editRoleId"]').val(role.id);
-                        //     edit_role.show();   
-                        // }
-
-                        let deleteRole = document.createElement('button');
-                        deleteRole.classList.add('deleteBtn');
-                        deleteRole.dataset.id = role.id;
-                        deleteRole.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
-                        deleteRole.onclick = function() {
-                            let delete_role = new bootstrap.Modal(document.getElementById('deleteRole'));
-                            document.querySelector('.roleName').textContent = role.name;
-                            $('#deleteRole').find('input[name="roleDeleteId"]').val(role.id);
-                            delete_role.show();
-                        }
-
-                        roleCon.appendChild(editRole);
-                        roleCon.appendChild(deleteRole);
-                        roleContainer.appendChild(roleCon);
-
-                        if(role.name == 'Admin' || role.name == 'Unassigned') {
-                            editRole.style.display = 'none';
-                            deleteRole.style.display = 'none';
-                        }
-                    })
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
+            .then(res => res.json())
+            .then(data => {
+                let permissionCon = document.getElementById('permissionContainer');
+                permissionCon.innerHTML = '';
+
+                data.permissions.forEach(permission => {
+                    let inputContainer = document.createElement('div');
+                    inputContainer.classList.add('d-flex', 'gap-2');
+
+                    let checkbox = document.createElement('input');
+                    checkbox.classList.add('checked-permission');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = permission.id;
+                    checkbox.id = `checkbox${permission.id}`;
+                    checkbox.name = 'permissions[]';
+
+                    let label = document.createElement('label');
+                    label.htmlFor = `checkbox${permission.id}`;
+                    label.textContent = permission.name;
+
+                    inputContainer.appendChild(checkbox);
+                    inputContainer.appendChild(label);
+                    permissionCon.appendChild(inputContainer);
+                })
+            })
         })
-     </script>
+    </script>
 
-    <!-- delete role -->
+<!-- add role -->
      <script>
-        $(document).on('click', '#confirmDelete', function(event) {
+        $(document).on('click', '#saveRole', function(event) {
             event.preventDefault();
-            let id = document.getElementById('roleDeleteId').value;
+            document.getElementById('editSpinner').style.display = 'block';
 
+            let role = document.getElementById('role_name').value;
+            let permissions = [];
+            document.querySelectorAll('.checked-permission:checked').forEach((checkbox) => {
+                permissions.push(checkbox.value);
+            })
+        
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/delete-role',
+                url: 'http://backend-folder.test/api/admin/save-role',
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
                 data: {
-                    id : id
+                    name: role,
+                    permissions: permissions
                 },
                 success: function(response) {
                     if(!response.message) {
-                        document.getElementById('deleteRoleError').textContent = response.error;
-                    }else {
+                        document.getElementById('roleError').textContent = response.error;
+                    }else{
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
@@ -219,15 +228,13 @@
                             showConfirmButton: false,
                             timer: 1200
                         }).then(() => {
-                            location.reload();
-                        }); 
+                            location.href = 'role_permission.php';
+                        });
                     }
+                },
+                complete: function() {
+                    document.getElementById('editSpinner').style.display = 'none';
                 }
             })
         })
-     </script>
-
-    
-
-</body>
-</html>
+    </script>

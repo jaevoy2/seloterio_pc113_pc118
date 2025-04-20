@@ -6,7 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loader.css">
     <title>Document</title>
 </head>
@@ -69,28 +70,29 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Delivery Mamagement</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Delivery Assignment</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="manage-orders.php">Manage Orders</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="manage-orders.php">List</a>
                                 </li>
                             </ol>
                         </nav>
                         <div class="bg-white shadow bg-body-tertiary rounded container position-relative py-3">
                         <div class="line-loader position-absolute" id="line-loader" style="display: none; width: 100%; top: 0; left: 0;"></div>
-                        <div class="pt-2">
-                                <table id="ordersTable" class="stripe hover">
-                                    <thead class="text-dark " style="background-color: #ffbf00; font-size: 12px;">
+                            <div class="pt-2">
+                                <table id="ordersTable" class="hover" style="font-size: 12px">
+                                    <thead class="text-dark " style="background-color: #ffbf00;">
                                         <tr>
                                             <th>#</th>
+                                            <th>Order ID</th>
                                             <th>Customer Name</th>
-                                            <th>Product</th>
-                                            <th>Price</th>
+                                            <!-- <th>Address</th> -->
                                             <th>Status</th>
+                                            <th>Assigned Rider</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark" style="font-size: 12px">
+                                    <tbody class="text-dark">
                                         <!-- Rows will be populated here -->
                                     </tbody>
                                 </table>
@@ -103,6 +105,7 @@
     </div>
 
 <?php include 'modals/logout-modal.php' ?>
+<?php include 'modals/delivery-modal.php' ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -154,6 +157,7 @@
     })
 </script>
 
+<!-- display orders -->
 <script>
     $(document).ready(function() {
         let table = $('#ordersTable').DataTable({
@@ -164,19 +168,63 @@
                                     return meta.row !== undefined ? meta.row + 1 : '';
                                 }
                             },
+                            {
+                                data: 'id',
+                                render: function(data, type, row) {
+                                    return `<div>#ORD${row.id}</div>`
+                                }
+                            },
                             { data: 'customer_name' },
-                            { data: 'product' },
-                            { data: 'price' },
-                            { data: 'status' },
+                            // { data: 'address' },
+                            {
+                                data: 'status',
+                                render: function(data, type, row) {
+                                    if(row.status == 'To Be Deliver') {
+                                        return `<div class="text-danger fw-semibold" style="font-size: 13px">${row.status}</div>`;
+                                    }else if(row.status == 'On Transit') {
+                                        return `<div class="text-warning fw-semibold" style="font-size: 13px">${row.status}</div>`;
+                                    }else if(row.status == 'Delivered') {
+                                        return `<div class="text-success fw-semibold" style="font-size: 13px">${row.status}</div>`;
+                                    }else{
+                                        return `<div class="text-primary fw-semibold" style="font-size: 13px">${row.status}</div>`;
+                                    }
+                                }
+                            },
                             {
                                 data: null,
                                 render: function(data, type, row) {
-                                    return `
-                                <div class="d-flex gap-2">
-                                    <a class="edit_user btn btn-primary btn-sm">
-                                        Assign
-                                    </a>
-                                </div>`;
+                                    if(row.rider == null) {
+                                        return `<div class="text-secondary"> —— </div>`
+                                    }else{
+                                        return `<div style="font-size: 12px">${row.rider.firstname + ' ' + row.rider.lastname}</div>`
+                                    }
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function(data, type, row) {
+                                    if(row.status == 'To Be Deliver') {
+                                            return `
+                                        <div class="d-flex gap-2">
+                                            <a href=""
+                                            data-bs-toggle="modal" data-bs-target="#assignDelivery"
+                                            data-id="${row.external_id}"
+                                            class="edit_user btn btn-warning fw-semibold btn-sm" id="assignBtn" style="font-size: 12px">
+                                                Assign
+                                            </a>
+                                        </div>`;
+                                    }else if(row.rider.status == 'Assigned' && row.status != 'Delivered'){
+                                        return `
+                                        <div class="d-flex gap-2">
+                                            <a href=""
+                                            data-bs-toggle="modal" data-bs-target="#reassignDelivery"
+                                            data-id="${row.external_id}"
+                                            data-rider_id="${row.rider.id}"
+                                            class="edit_user btn btn-primary fw-semibold btn-sm" id="reassignBtn" style="font-size: 12px">
+                                                Reassign
+                                            </a>
+                                        </div>`;
+                                    }
                                 }
                             }
                         ]
@@ -186,7 +234,7 @@
     function loadTable() {
         document.getElementById('line-loader').style.display = 'block';
 
-        fetch('http://backend-folder.test/api/orders', {
+        fetch('http://backend-folder.test/api/admin/orders', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Accept': 'application/json'
@@ -205,6 +253,187 @@
     setInterval(loadTable, 10000);
     })
 </script>
+
+<!-- assign orders -->
+ <script>
+    $(document).on('click', '#assignBtn', function() {
+        let orderId = $(this).data("id");
+        document.getElementById('orderId').value = orderId;
+        
+        fetch('http://backend-folder.test/api/admin/riders', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Accept': 'application/json'
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            let riders = data.riders;
+            let riderCon = document.getElementById('riderOption');
+            riderCon.innerHTML = '';
+
+            if(riders.length == 0) {
+                let norider = document.getElementById('no_vailable');
+                norider.textContent = 'No available rider at the moment';
+                document.getElementById('assignToRider').disabled = true;
+                return;
+            }
+
+            let defaultOpt = document.createElement('option');
+            defaultOpt.text = 'Select Rider';
+            defaultOpt.selected = true;
+            defaultOpt.disabled = true;
+            riderCon.appendChild(defaultOpt);
+            
+            riders.forEach(rider => {
+                let option = document.createElement('option');
+                option.value = rider.id;
+                option.text = rider.firstname + ' ' + rider.lastname;
+
+                riderCon.appendChild(option);
+            })
+        })
+    })
+ </script>
+
+
+<!-- re-assign -->
+ <script>
+    $(document).on('click', '#reassignBtn', function() {
+        let orderId = $(this).data("id");
+        let riderId = $(this).data("rider_id");
+        document.getElementById('reassignOrderId').value = orderId;
+        document.getElementById('reassignRiderId').value = riderId;
+        
+        fetch('http://backend-folder.test/api/admin/reassign-order', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Accept': 'application/json',
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            let riders = data.riders;
+            let riderCon = document.getElementById('riderOptionAgain');
+            riderCon.innerHTML = '';
+
+            let available = riders.filter(rider => rider.status != 'Assigned');
+            if(available.length == 0) {
+                let norider = document.getElementById('no_reassign');
+                norider.textContent = 'No available rider at the moment';
+                document.getElementById('reassignToRider').disabled = true;
+                return;
+            }
+
+            riders.forEach(rider => {
+                let option = document.createElement('option');
+                if(rider.status != 'Assigned' || rider.id == riderId){
+                    if(riderId == rider.id) {
+                        option.selected = true;
+                    }
+                    option.value = rider.id;
+                    option.text = rider.firstname + ' ' + rider.lastname;
+                }else {
+                    return;
+                }
+                riderCon.appendChild(option);
+            })
+        })
+    })
+ </script>
+
+
+<!-- submit -->
+  <script>
+    $(document).on('click', '#assignToRider', function(e) {
+        e.preventDefault();
+        let orderId = document.getElementById('orderId').value;
+        let riderId = document.getElementById('riderOption').value;
+        document.getElementById('editSpinner').style.display = 'block';
+        
+        fetch('http://backend-folder.test/api/admin/assign-order', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                'order_id': orderId,
+                'rider_id': riderId
+            })
+        })
+        .then(res => res.json())
+        .then(response => {
+            if(!response.message) {
+                document.getElementById('assign_error').textContent = response.error;
+            }else{
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    color: "#008000",
+                    width: 350,
+                    toast: true,
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 1200
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        })
+        .finally(() => {
+            document.getElementById('editSpinner').style.display = 'none';
+        })
+    })
+  </script>
+
+<!-- submit reassign -->
+ <script>
+    $(document).on('click', '#reassignToRider', function(e) {
+        e.preventDefault();
+        let orderId = document.getElementById('reassignOrderId').value;
+        let riderId = document.getElementById('reassignRiderId').value;
+        let newRider = document.getElementById('riderOptionAgain').value;
+        document.getElementById('editSpinner').style.display = 'block';
+        
+        fetch('http://backend-folder.test/api/admin/save-reassign', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                order_id: orderId,
+                id: newRider,
+                old_id: riderId
+            })
+        })
+        .then(res => res.json())
+        .then(response => {
+            if(!response.message) {
+                document.getElementById('reassign_error').textContent = response.error;
+            }else{
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    color: "#008000",
+                    width: 350,
+                    toast: true,
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 1200
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        })
+        .finally(() => {
+            document.getElementById('editSpinner').style.display = 'none';
+        })
+    })
+ </script>
 
 
 </body>

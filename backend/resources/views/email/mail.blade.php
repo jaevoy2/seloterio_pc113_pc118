@@ -9,10 +9,12 @@ Email: {{$email}}
 
 Password: {{$password}}
 
-<a href="{{ url('/padeliber') }}"
-   style="display: flex; justify-content: center; padding: 10px 20px; background-color: #ffbf00; color: #000000; text-decoration: none; border-radius: 5px;">
-   Login Now!
-</a>
+<div style="display: flex; justify-content: center;">
+    <a href="{{ url('/frontend-folder.test') }}"
+       style="padding: 10px 20px; background-color: #ffbf00; color: #000000; text-decoration: none; border-radius: 5px;">
+       Login Now!
+    </a>
+</div>
 
 
 Thanks, <br>

@@ -7,12 +7,10 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/loader.css">
     <title>Document</title>
 </head>
 <body>
-    
-
-
 <?php include 'partials/sidebar.php' ?>
     <div class="card_con position-relative" style="width: 100%" style="">
         <div class="list-group-flush list-unstyled">
@@ -68,25 +66,29 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Delivery Mamagement</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">My Deliveries</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="manage-orders.php">Manage Orders</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="manage-orders.php">Delivery</a>
                                 </li>
                             </ol>
                         </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container py-3">
-                            <div class="line-loader position-absolute" id="line-loader" style="display: none; width: 100%; top: 0; left: 0;"></div>
+                        <div class="bg-white shadow bg-body-tertiary rounded position-relative container py-3">
+                        <div class="line-loader position-absolute" id="line-loader" style="display: none; width: 100%; top: 0; left: 0;"></div>
                                 <div class="pt-2">
-                                    <table id="deliveriesTable" class="stripe hover" style="font-size: 12px">
+                                    <a href="" class="btn btn-sm fw-semibold" style="font-size: 13px; background-color: #ffbf00;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-history"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 8l0 4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>
+                                        View Delivery History
+                                    </a>
+                                    <table id="assignedTable" class="hover" style="font-size: 12px">
                                         <thead class="text-dark " style="background-color: #ffbf00;">
                                             <tr>
-                                                <th>#</th>
+                                                <th>Order Id</th>
                                                 <th>Customer Name</th>
-                                                <th>Product</th>
-                                                <th>Price</th>
-                                                <th>Rider</th>
+                                                <th>Address</th>
                                                 <th>Status</th>
+                                                <!-- <th>Updated At</th> -->
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-dark">
@@ -103,6 +105,7 @@
     </div>
 
 <?php include 'modals/logout-modal.php' ?>
+<?php include 'modals/delivery-modal.php' ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -154,52 +157,68 @@
     })
 </script>
 
-<!-- display orders -->
+<!-- display order -->
 <script>
     $(document).ready(function() {
-        let table = $('#deliveriesTable').DataTable({
+        let table = $('#assignedTable').DataTable({
                         searching: false,
+                        paging: false,
+                        info: false,
                         columns: [
                             {
-                                data: null,
-                                render: function(data, type, row, meta) {
-                                    return meta.row !== undefined ? meta.row + 1 : '';
+                                data: 'id',
+                                render: function(data, type, row) {
+                                    return `<div style="font-size: 13px">ORD${row.id}</div>`
                                 }
                             },
                             { data: 'customer_name' },
-                            { data: 'product' },
-                            { data: 'price' },
-                            {
-                                data: null,
-                                render: function(data, type, row) {
-                                    return `<div class="" style="font-size: 11px">${row.rider.firstname + ' ' + row.rider.lastname}</div>`
-                                }
-                            },
+                            { data: 'address' },
                             {
                                 data: 'status',
                                 render: function(data, type, row) {
-                                    if(row.status == 'Delivered') {
-                                        return `<div class=" btn btn-success btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    if(row.status == 'Assigned') {
+                                        return `<div class="text-primary fw-semibold">${row.status}</div>`
                                     }
-                                    else if(row.status == 'Ready For Delivery') {
-                                        return `<div class=" btn btn-warning btn-sm" style="font-size: 11px">${row.status}</div>`;
-                                    }
-                                    else if(row.status == 'Out For Delivery') {
-                                        return `<div class=" btn btn-primary btn-sm" style="font-size: 11px">${row.status}</div>`;
-                                    }
-                                    else{
-                                        return `<div class=" btn btn-info btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    if(row.status == 'In transit') {
+                                        return `<div class="text-warning fw-semibold">${row.status}</div>`
                                     }
                                 }
                             },
+                            // {
+                            //     data: 'updated_at',
+                            //     render: function(data, type, row) {
+                            //         const date = new (data);
+                            //         return date.toISOString().slice(0, 10); // returns YYYY-MM-DD
+                            //     }
+                            // },
+                            {
+                                data: null,
+                                render: function(data, type, row) {
+                                    return `
+                                <div class="d-flex gap-2">
+                                    <a href=""
+                                    style="color: gray">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                                    </a>
+
+                                    <a class="edit_user"
+                                    id="updateOrderStatusBtn"
+                                    data-id="${row.id}"
+                                    data-rider_id="${row.rider_id}"
+                                    data-bs-toggle="modal" data-bs-target="#updateOrderStatus">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                    </a>
+                                </div>`;
+                                }
+                            }
                         ]
                     })
 
-                    
-    function loadTable() {
+    function loadAssignment() {
         document.getElementById('line-loader').style.display = 'block';
 
-        fetch('http://backend-folder.test/api/admin/deliveries', {
+        fetch('http://backend-folder.test/api/rider/my-assigned-order', {
+            method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Accept': 'application/json'
@@ -207,21 +226,51 @@
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
-            table.clear().rows.add(data).draw();
+            let order = data.order;
+            table.clear().rows.add(order).draw();
         })
         .finally(() => {
             document.getElementById('line-loader').style.display = 'none';
         })
-    }    
+    }
+    loadAssignment();
+    setInterval(loadAssignment, 10000);
 
-    loadTable();
-    setInterval(loadTable, 10000);
     })
 </script>
 
+<!-- populate the modal -->
+ <script>
+    $(document).on('click', '#updateOrderStatusBtn', function() {
+        document.getElementById('updateOrderId').value = $(this).data("id");
+    })
+ </script>
 
+<!-- update status -->
+ <script>
+    $(document).on('click', '#saveOrderUpdate', function(e) {
+        e.preventDefault();
+        let orderId = document.getElementById('updateOrderId').value;
+        let status = document.getElementById('riderUpdates').value;
 
+        fetch('http://backend-folder.test/api/rider/update-order-status', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: orderId,
+                status: status
+            })
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(response);
+        })
+    })
+ </script>
 
 </body>
 </html>

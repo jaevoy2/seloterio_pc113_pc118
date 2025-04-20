@@ -6,7 +6,9 @@ use App\Models\Student;
 use App\Models\Employee;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SettingController;;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\RiderController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PracticeOrder;
 use App\Models\Order;
@@ -33,17 +35,33 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
         // settings
         Route::get('/roles-permissions', [SettingController::class, 'showAll'])->middleware('admin');
         Route::post('/save-role', [SettingController::class, 'saveRole'])->middleware('admin');
+        Route::post('/show-specific', [SettingController::class, 'showSpecific'])->middleware('admin');
         Route::post('/edit-role', [SettingController::class, 'saveEditRole'])->middleware('admin');
         Route::post('/delete-role', [SettingController::class, 'deleteRole'])->middleware('admin');
-        Route::post('/save-permission', [SettingController::class, 'savePermission'])->middleware('admin');
-        Route::post('/edit-permission', [SettingController::class, 'editPermission'])->middleware('admin');
-        Route::post('/delete-permission', [SettingController::class, 'removePermisison'])->middleware('admin');
         Route::get('/menus', [SettingController::class, 'menus']);
         Route::post('/store-menus', [SettingController::class, 'storeMenu'])->middleware('admin');
-        Route::get('access_control', [SettingController::class, 'access'])->middleware('admin');
-        Route::post('/store-menu-permission', [SettingController::class, 'storeMenuPermission'])->middleware('admin');
-        Route::post('/remove-permission', [SettingController::class, 'removePermission'])->middleware('admin');
+        Route::get('access_control', [SettingController::class, 'access']);
+        Route::post('/store-menu-permission', [SettingController::class, 'saveMenuPerm'])->middleware('admin');
+        // Route::post('/remove-permission', [SettingController::class, 'removePermission'])->middleware('admin');
+
+        //delivery assignment
+        Route::get('/orders', [DeliveryController::class, 'orders']);
+        Route::get('/riders', [DeliveryController::class, 'riders']);
+        Route::get('deliveries', [DeliveryController::class, 'deliveries']);
+        Route::post('/assign-order', [DeliveryController::class, 'assigned']);
+        Route::get('/reassign-order', [DeliveryController::class, 'reassignRiders']);
+        Route::post('/save-reassign', [DeliveryController::class, 'saveReassign']);
+
     });
+
+    // riders delivery
+    Route::prefix('rider')->group(function() {
+        Route::get('/my-assigned-order', [RiderController::class, 'getDelivery']);
+        Route::post('update-order-status', [RiderController::class, 'updateOrderStatus']);
+
+    });
+
+
 
     Route::get('/currentUser', [UserController::class, 'currentUser']);
     Route::post('/edit-profile', [UserController::class, 'editProfile']);
@@ -54,10 +72,6 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
     Route::get('/account', [UserController::class, 'accountView']);
     Route::get('/user-access', [UserController::class, 'userMenuAccess']);
 
-    Route::get('/orders', function() {
-        $orders = Order::all();
-        return response()->json($orders);
-    });
 
     // sir marnie activity
     Route::prefix('employee')->group(function() {

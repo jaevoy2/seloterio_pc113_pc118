@@ -9,9 +9,12 @@ class Order extends Model
     protected $fillable = [
         'external_id',
         'customer_name',
-        'product',
-        'description',
-        'price',
-        'status'
+        'address',
+        'status',
+        'rider_id'
     ];
+
+    public function rider() {
+        return $this->belongsTo(User::class);
+    }
 }

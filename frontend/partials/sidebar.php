@@ -9,28 +9,14 @@
     <ul class="nav main_menu mt-4">
         <p class="mb-1" style="font-size: 11px; font-weight:bold; color:rgb(174, 174, 174)">MAIN MENU</p>
         <li class="p-1">
-            <div class="<?= (strpos($currentPage, 'dashboard.php') !== false) ? 'active' : '' ?> p-2">
+            <div class="<?= (strpos($currentPage, 'dashboard.php') !== false) ? 'active' : '' ?> p-2 mb-1">
                 <a href="dashboard.php" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2"  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-layout-dashboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 3a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2zm0 12a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-2a2 2 0 0 1 2 -2zm10 -4a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2zm0 -8a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-2a2 2 0 0 1 2 -2z" /></svg>
                     Dashboard
                 </a>
             </div>
-        <!-- delivery Rider menu -->
-        <div class="p-2 rider_menu" style="display: none">
-            <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
-                <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-truck-delivery"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /><path d="M3 9l4 0" /></svg>
-                Deliveries
-            </a>
-        </div>
-        <!-- delivery Rider menu -->
-        <div class="p-2 rider_menu" style="display: none">
-            <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
-                <svg class="me-2"  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-                My Deliveries
-            </a>
-        </div>
-
-        <li class="p-1 mb-1" id="User Management" style="display: none">
+        </li>
+        <li class="p-1 mb-1" id="Manage User" style="display: none">
             <div class="<?= (strpos($currentPage, 'users.php') !== false) ? 'active' : '' ?> p-2">
                 <a href="users.php" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2"  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
@@ -38,11 +24,27 @@
                 </a>
             </div>
         </li>
-        <li class="p-1" id="Delivery Management" style="display: none">
+        <li class="p-1 mb-1" id="Order Assignments" style="display: none">
+            <div class="<?= (strpos($currentPage, 'manage-orders.php') !== false) ? 'active' : '' ?> p-2">
+                <a href="manage-orders.php" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-sort-ascending-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 9l3 -3l3 3" /><path d="M5 5m0 .5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5z" /><path d="M5 14m0 .5a.5 .5 0 0 1 .5 -.5h4a.5 .5 0 0 1 .5 .5v4a.5 .5 0 0 1 -.5 .5h-4a.5 .5 0 0 1 -.5 -.5z" /><path d="M17 6v12" /></svg>
+                    Order Assignments
+                </a>
+            </div>
+        </li>
+        <li class="p-1 mb-1" id="My Deliveries" style="display: none">
+            <div class="<?= (strpos($currentPage, 'my-delivery.php') !== false) ? 'active' : '' ?> p-2">
+                <a href="my-delivery.php" class="nav_btns text-dark d-flex align-items-center text-dark" style="text-decoration: none">
+                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-package-export"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 21l-8 -4.5v-9l8 -4.5l8 4.5v4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12v9" /><path d="M12 12l-8 -4.5" /><path d="M15 18h7" /><path d="M19 15l3 3l-3 3" /></svg>                    
+                    My Deliveries
+                </a>
+            </div>
+        </li>
+    <!-- <li class="p-1" id="Delivery Assignments" style="display: none">
             <div class="p-2">
                 <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" data-bs-toggle="collapse" data-bs-target="#delivery" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
-                    Delivery Management
+                    Delivery Assignments
                 </a>
             </div>
             <div class="collapse report drop_down" style="background-color:rgb(222, 222, 222); border-radius:5px" id="delivery">
@@ -55,8 +57,8 @@
                     Deliveries
                 </a>
             </div>
-        </li>
-        <li class="p-1" id="Report" style="display: none">
+        </li> -->
+        <li class="p-1" id="Reports" style="display: none">
             <div class="p-2">
                 <a href="" class="nav_btns text-dark d-flex align-items-center text-dark" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg>
@@ -78,8 +80,8 @@
 
     <ul class="nav settings mt-4">
         <p class="mb-1" style="font-size: 11px; font-weight:bold; color:rgb(174, 174, 174)">SETTINGS</p>
-        <li class="py-1" id="Role & Permission Manager" style="display: none">
-            <div class="<?= (strpos($currentPage, 'role_permission.php') !== false) ? 'active' : '' ?> p-2">
+        <li class="py-1" id="Roles & Permission" style="display: none">
+            <div class="<?= (strpos($currentPage, 'role_permission.php') !== false) || (strpos($currentPage, 'add-role.php') !== false) || (strpos($currentPage, 'edit-role.php') !== false) ? 'active' : '' ?> p-2">
                 <a href="../role_permission.php" class="nav_btns d-flex align-items-center text-dark" style="text-decoration: none">
                     <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>
                     Role & Permission Manager
@@ -123,27 +125,26 @@
         })
         .then(res => res.json())
         .then(response => {
-            let userRole = response.user.role;
             let userPermission = response.user.permissions;
+            let userRole = response.user.name;
             let menuPermission = response.menu;
 
-            // console.log(userPermission);
             menuPermission.forEach(menu => {
                 menu.permissions.forEach(permission => {
                     userPermission.forEach(userPerm => {
-                        if (permission.name == userPerm.name) {
+                        if(userPerm.name == permission.name){
                             document.getElementById(menu.name).style.display = 'block';
                         }
                     })
                 })
             });
             
-            if(userRole.name == 'Delivery Man' || userRole.name == 'Delivery Rider' || userRole.name == 'Food Delivery Rider' || userRole.name == 'Food Rider' || userRole.name == 'Rider') {
-                let riderMenu = document.querySelectorAll('.rider_menu');
-                riderMenu.forEach(menu => {
-                    menu.style.display = 'block';
-                });
-            }
+            // if(userRole.name == 'Delivery Man' || userRole.name == 'Delivery Rider' || userRole.name == 'Food Delivery Rider' || userRole.name == 'Food Rider' || userRole.name == 'Rider') {
+            //     let riderMenu = document.querySelectorAll('.rider_menu');
+            //     riderMenu.forEach(menu => {
+            //         menu.style.display = 'block';
+            //     });
+            // }
         })
     })
 </script>

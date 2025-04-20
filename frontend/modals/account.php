@@ -57,10 +57,10 @@
                                 </div>
                                 <input type="file" class="dropify"  data-height="100" name="picture" id="profilePicture"/>
                             </div>
-                            <div class="form-group mb-3">
+                            <!-- <div class="form-group mb-3">
                                 <small class="text-secondary" style="font-size: 12px">Update Current Password</small>
                                 <input type="password" placeholder="Password" id="profilePass" class="form-control" name="password" required>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-end p-3 gap-2">

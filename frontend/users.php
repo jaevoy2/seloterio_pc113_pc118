@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="http://backend-folder.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -70,7 +70,7 @@
                                     <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">User Management</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">User List</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
                                 </li>
                             </ol>
                         </nav>
@@ -94,6 +94,7 @@
                                     </ul>
                                 </div>
                             </div>
+                            <!-- update user email is still not working -->
                             <div class="pt-2" id="printTableCon">
                                 <table id="usersTable" class="stripe hover">
                                     <thead class="text-dark " style="background-color: #ffbf00;">
@@ -266,21 +267,6 @@
         })
      </script>
 
-    <script>
-        function toggleCheckboxes() {
-            const checkboxes = document.getElementById('checkboxes');
-            checkboxes.style.display = checkboxes.style.display === 'block' ? 'none' : 'block';
-        }
-        document.addEventListener('click', function(event) {
-            const target = event.target;
-            const checkboxes = document.getElementById('checkboxes');
-            if (!checkboxes.contains(target) && !target.matches('.selectBox, .selectBox *')) {
-                checkboxes.style.display = 'none';
-            }
-        });
-
-    </script>
-
     <!-- Add user -->
     <script>
         $(document).ready(function() {
@@ -314,39 +300,10 @@
                         if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
                             return;
                         }
-                        select.appendChild(option);
-                    });
-
-                    select.addEventListener('change', function() {
-                        const selectedRole = this.value;
-                        const userRole = roles.find(role => role.id == selectedRole);
-                        const permissionContainer = document.getElementById('checkboxes');
-                        permissionContainer.innerHTML = '';
-
-                        if(userRole.name == null) {
-                            permissionContainer.style.display = 'none';
-                        }else if (userRole.name == "Rider" || userRole.name == "Delivery Rider" || userRole.name == "Unassigned" || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
-                            permissionContainer.style.display = 'none';
-                        }else{
-                            permissions.forEach(permission => {
-                                let inputContainer = document.createElement('div');
-                                inputContainer.classList.add('checkbox-container');
-
-                                let checkbox = document.createElement('input');
-                                checkbox.classList.add('check_permission');
-                                checkbox.type = 'checkbox';
-                                checkbox.value = permission.id;
-                                checkbox.name = 'permissions[]';
-
-                                let label = document.createElement('label');
-                                label.htmlFor = `checkbox${permission.id}`;
-                                label.textContent = permission.name;
-
-                                inputContainer.appendChild(checkbox);
-                                inputContainer.appendChild(label);
-                                permissionContainer.appendChild(inputContainer);
-                            });
+                        if(role.name == 'Unassigned') {
+                            return;
                         }
+                        select.appendChild(option);
                     });
                     
                     $(document).on('click', '#register', function(event) {
@@ -364,10 +321,6 @@
                         let password = document.getElementById('password').value;
                         let role_id = document.getElementById('userRole').value;
                         let picture = document.getElementById('profile').files[0];
-                        let permissions = [];
-                        document.querySelectorAll('.check_permission:checked').forEach((checkbox) => {
-                            permissions.push(checkbox.value);
-                        });
 
                         if (role_id == null) {
                             document.getElementById('addUser_error').textContent = 'Please select a role first';
@@ -386,10 +339,6 @@
                         formData.append('email', email);
                         formData.append('password', password);
                         formData.append('role_id', role_id);
-
-                        permissions.forEach(permission => {
-                            formData.append('permissions[]', permission);
-                        });
                         
                         if(picture) {
                             formData.append('picture', picture);
@@ -432,22 +381,6 @@
                 }
             });
         });
-    </script>
-
-
-    <script>
-        function editCheckboxes() {
-            const checkboxes = document.getElementById('editCheckboxes');
-            checkboxes.style.display = checkboxes.style.display === 'block' ? 'none' : 'block';
-        }
-        document.addEventListener('click', function(event) {
-            const target = event.target;
-            const checkboxes = document.getElementById('editCheckboxes');
-            if (!checkboxes.contains(target) && !target.matches('.selectBox, .selectBox *')) {
-                checkboxes.style.display = 'none';
-            }
-        });
-
     </script>
 
     <!-- populate the form -->
@@ -504,52 +437,21 @@
                         if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
                             return;
                         }
+                        if(role.name == 'Unassigned') {
+                            return;
+                        }
                         if(roleSelected == role.name) {
                             option.selected = true;
                         }
                         select.appendChild(option);
                     });
                     
-                    document.getElementById('editRole').addEventListener('change', function() {
-                        const selectedRole = this.value;
-                        const permissionContainer = document.getElementById('editCheckboxes');
-                        const userRole = roles.find(role => role.id == selectedRole);
-                        permissionContainer.innerHTML = '';
-
-                        if(userRole.name == 'Rider' || userRole.name == 'Delivery Rider' || userRole.name == 'Unassigned' || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
-                            permissionContainer.style.display = 'none';
-                        }else{
-                            const permissions = response.permissions;
-                            permissions.forEach(permission => {
-                                let inputContainer = document.createElement('div');
-                                inputContainer.classList.add('checkbox-container');
-
-                                const checkbox = document.createElement('input');
-                                checkbox.classList.add('checked_permission');
-                                checkbox.type = 'checkbox';
-                                checkbox.id = `checkbox${permission.id}`;
-                                checkbox.value = permission.id;
-                                checkbox.name = 'permissions[]';
-
-                                const label = document.createElement('label');
-                                label.htmlFor = `checkbox${permission.id}`;
-                                label.textContent = permission.name;
-
-                                inputContainer.appendChild(checkbox);
-                                inputContainer.appendChild(label);
-                                permissionContainer.appendChild(inputContainer);
-
-                                if(userPerm.permissions.some(userPermission => userPermission.id == permission.id)) {
-                                    checkbox.checked = true;
-                                }
-                            });
-                        }
-                    });
                     document.getElementById('editRole').dispatchEvent(new Event('change'));
                 }
             });
         });
     </script>
+
 
      <!-- edit -->
     <script>
@@ -568,10 +470,6 @@
             let editEmail = document.getElementById('editEmail').value;
             let role_id = document.getElementById('editRole').value;
             let picture = document.getElementById('editProfile').files[0];
-            let permissions = [];
-            document.querySelectorAll('.checked_permission:checked').forEach((checkbox) => {
-                permissions.push(checkbox.value);
-            });
 
             let formData = new FormData();
             formData.append('id', userId);
@@ -587,9 +485,6 @@
             if(picture) {
                 formData.append('picture', picture);
             }
-            permissions.forEach(permission => {
-                formData.append('permissions[]', permission);
-            });
 
             $.ajax({
                 url: 'http://backend-folder.test/api/admin/edit-user',
@@ -627,6 +522,7 @@
         })
     </script>
 
+
     <!-- populate delete modal -->
      <script>
         $(document).on('click', '#deleteUserBtn', function() {
@@ -640,6 +536,7 @@
 
         })
      </script>
+     
 
      <!-- delete user -->
     <script>
