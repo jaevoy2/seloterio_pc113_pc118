@@ -115,7 +115,7 @@
 
 <script>
     window.addEventListener("load", function() {
-        fetch('http://backend-folder.test/api/user-access', {
+        fetch('https://backend-folder.test/api/user-access', {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')

@@ -351,8 +351,8 @@
                     status.textContent = order.status;
         
                     if(order.status == 'In transit') {
-                        let captureBtn = document.getElementById('capture');
-                        captureBtn.style.display = 'block';
+                        let scanBtn = document.getElementById('scanBtn');
+                        scanBtn.style.display = 'block';
                         document.getElementById('save_picture').dataset.id = order.id;
                         status.style.color = '#ffbf00';
                     }

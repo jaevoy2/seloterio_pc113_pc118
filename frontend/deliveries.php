@@ -6,14 +6,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
-
-
     
-    <?php include 'partials/sidebar.php' ?>
+
+
+<?php include 'partials/sidebar.php' ?>
     <div class="card_con position-relative" style="width: 100%" style="">
         <div class="list-group-flush list-unstyled">
             <div class="list-group-item p-0">
@@ -68,12 +68,33 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="dashboard.php">Dashboard</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Delivery Mamagement</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="manage-orders.php">Manage Orders</a>
                                 </li>
                             </ol>
                         </nav>
                         <div class="bg-white shadow bg-body-tertiary rounded container py-3">
-                            <p class="fw-semibold">Dashboard Page </p>
+                            <div class="line-loader position-absolute" id="line-loader" style="display: none; width: 100%; top: 0; left: 0;"></div>
+                                <div class="pt-2">
+                                    <table id="deliveriesTable" class="stripe hover" style="font-size: 12px">
+                                        <thead class="text-dark " style="background-color: #ffbf00;">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Customer Name</th>
+                                                <th>Product</th>
+                                                <th>Price</th>
+                                                <th>Rider</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-dark">
+                                            <!-- Rows will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>  
                 </div>
@@ -81,15 +102,19 @@
         </div>
     </div>
 
-    <?php include 'modals/logout-modal.php' ?>
+<?php include 'modals/logout-modal.php' ?>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+<script src="http://backend-folder.test/dist/js/dropify.min.js"></script>
 
+
+<!-- prevent back -->
 <script>
     const token = localStorage.getItem('token');
     if(!token) {
-        window.location.href = 'https://frontend-folder.test';
+        window.location.href = 'http://frontend-folder.test';
     }else{
         if (window.history && window.history.pushState) {
             window.history.pushState(null, null, location.href);
@@ -100,6 +125,21 @@
     }
 </script>
 
+<!-- dropify -->
+ <script>
+    $(document).ready(function() {
+        $('.dropify').dropify({
+            messages: {
+                'default': 'Drag and drop a file here or click',
+                'replace': 'Drag and drop or click to replace',
+                'remove':  'Remove',
+                'error':   'Ooops, something wrong happended.'
+            }
+        });
+    });
+ </script>
+
+<!-- preloader -->
 <script>
     window.addEventListener("load", function() {
         setTimeout(() => {
@@ -114,44 +154,74 @@
     })
 </script>
 
+<!-- display orders -->
 <script>
-    $.ajax({
-        url: 'https://backend-folder.test/api/admin/menus',
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            'Accept': 'application/json'
-        },
-        success: function(data) {
-            let menuElement = document.querySelectorAll('li[id]');
-            let menuIds = [];
-            
-            menuElement.forEach(menu => {
-                if(!data.menus.find(menuCon => menuCon.name == menu.id)) {
-                    menuIds.push({
-                        name: menu.id
-                    });
-                }
-            });
+    $(document).ready(function() {
+        let table = $('#deliveriesTable').DataTable({
+                        searching: false,
+                        columns: [
+                            {
+                                data: null,
+                                render: function(data, type, row, meta) {
+                                    return meta.row !== undefined ? meta.row + 1 : '';
+                                }
+                            },
+                            { data: 'customer_name' },
+                            { data: 'product' },
+                            { data: 'price' },
+                            {
+                                data: null,
+                                render: function(data, type, row) {
+                                    return `<div class="" style="font-size: 11px">${row.rider.firstname + ' ' + row.rider.lastname}</div>`
+                                }
+                            },
+                            {
+                                data: 'status',
+                                render: function(data, type, row) {
+                                    if(row.status == 'Delivered') {
+                                        return `<div class=" btn btn-success btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    }
+                                    else if(row.status == 'Ready For Delivery') {
+                                        return `<div class=" btn btn-warning btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    }
+                                    else if(row.status == 'Out For Delivery') {
+                                        return `<div class=" btn btn-primary btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    }
+                                    else{
+                                        return `<div class=" btn btn-info btn-sm" style="font-size: 11px">${row.status}</div>`;
+                                    }
+                                }
+                            },
+                        ]
+                    })
 
-            if(menuIds.lenght > 0) {
-                $.ajax({
-                    url: 'https://backend-folder.test/api/admin/store-menus',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        menus: menuIds
-                    }
-                })
+                    
+    function loadTable() {
+        document.getElementById('line-loader').style.display = 'block';
+
+        fetch('http://backend-folder.test/api/admin/deliveries', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Accept': 'application/json'
             }
-        }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            table.clear().rows.add(data).draw();
+        })
+        .finally(() => {
+            document.getElementById('line-loader').style.display = 'none';
+        })
+    }    
+
+    loadTable();
+    setInterval(loadTable, 10000);
     })
-
-
 </script>
+
+
+
 
 </body>
 </html>

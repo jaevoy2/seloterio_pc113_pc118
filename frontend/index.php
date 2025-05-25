@@ -52,7 +52,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            fetch(`http://backend-folder.test/api/login`, {
+            fetch(`https://backend-folder.test/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'Application/json',
