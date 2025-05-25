@@ -1,0 +1,261 @@
+#burger_icon {
+    display: none;
+}
+#close_sidebar {
+    display: none;
+}
+.boxes {
+    width: 300px;
+    height: 100%;
+    padding: 15px;
+}
+#dashboard_boxes {
+    display: flex;
+    gap: 40px;
+}
+#side_overlay {
+    display: none;
+}
+.box-text{
+    font-size: 13px;
+}
+.box-count {
+    font-size: 35px;
+}
+.subs {
+    font-size: 13px;
+}
+.top-controls {
+    display: flex;
+    margin: 30px 0;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.user_info{
+    display: flex;
+    gap: 250px;
+}
+#side_logout {
+    display: none;
+}
+.fullname {
+    font-size: 18px;
+}
+.role {
+    font-size: 15px;
+}
+.user_name_image {
+    display: flex;
+    gap: 50px;
+}
+.profile {
+    width: 80px;
+    height: 80px;
+}
+#order_id {
+    font-size: 20px;
+}
+.ord_status {
+    font-size: 13px;
+}
+.amount, .method {
+    font-size: 12px;
+}
+#price {
+    font-size: 30px;
+}
+/* .detail_head {
+    display: flex;
+    white-space: nowrap;
+    text-align: center;
+    padding: 15px 180px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+} */
+.cus_detailsCon {
+    margin-top: 20px;
+}
+#updateOrdStatus, #scanBtn {
+    margin: 120px 0;
+    width: 100%;
+    font-size: 15px;
+    padding: 15px 0;
+    bottom: 0;
+}
+
+.color_box {
+    display: none;
+}
+.qrReader {
+    width: 400px;
+}
+
+@media (max-width: 800px) {
+
+    body {
+        grid-template-columns: 100%;
+        position: relative;
+        min-height: 95vh;
+        padding: 0 10px;
+    }
+    #burger_icon {
+        display: block;
+    }
+    #close_sidebar {
+        display: block;
+    }
+    #side_overlay {
+        display: block;
+        width: 99vw;
+        height: 100vh;
+        background-color: #141414C9;
+        position: absolute;
+        opacity: 0;
+        z-index: 3;
+        left: -13px;
+        top: -13px;
+        transition: opacity .3s ease;
+        pointer-events: none;
+    }
+    .logo{
+        width: 120px;
+    }
+    .user_nav {
+        display: none;
+    }
+    .nav_title, .my_profile_text, .fullname{
+        font-size: 13px;
+    }
+    #sidebar_con {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        height: 100%;
+        transform: translateX(-100%);
+        overflow-x: hidden;
+        z-index: 5;
+        width: 310px;
+        padding: 0px 10px 0 10px;
+        transition: transform .3s ease;
+    }
+    #sidebar_con.side_active {
+        background-color: #fff;
+        transform: translateX(0);
+        width: 310px;
+        padding: 0px 10px 0 10px;
+        transition: transform .3s ease;
+    }
+
+    #dashboard_boxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        width: 100%;
+    }
+    .boxes {
+        flex: 25%;
+        height: 75px;
+        font-size: 12px;
+    }
+    .subs {
+        font-size: 6px;
+    }
+    .box-count, .boxes svg {
+        font-size: 20px;
+        height: 15px;
+        width: 15px;
+    }
+    .bottom-controls {
+        display: none;
+    }
+    .top-controls {
+        display: flex;
+        justify-content: end;
+        margin: 5px 0;
+        font-size: 13px;
+    }
+    .top-controls .dt-length {
+        display: none;
+    }
+    .top-controls .dt-input {
+        margin: 5px;
+        width: 120px;
+        font-size: 8px;
+    }
+    .forms_con {
+        display: flex;
+        flex-direction: column;
+        gap: 0 !important;
+    }
+    .form_con1, .form_con2 {
+        width: 100%;
+    }
+    #add_btn_user {
+        font-size: 12px;
+    }
+    .user_info {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    .user_picture {
+        width: 20px;
+        height: 20px;
+    }
+    #side_logout {
+        display: flex;
+    }
+    .top svg {
+        width: 15px;
+        height: 15px;
+    }
+    .user_name_image, .role{
+        display: flex;
+        gap: 15px;
+        font-size: 10px;
+    }
+    .profile {
+        width: 60px;
+        height: 60px;
+    }
+    .order_con svg {
+        width: 15px;
+        height: 15px;
+    }
+    #order_id {
+        font-size: 13px;
+    }
+    .ord_status {
+        font-size: 8px;
+    }
+    #price {
+        font-size: 20px;
+    }
+    #price svg {
+        width: 22px;
+        height: 22px;
+    }
+    .amount, .method {
+        font-size: 8px;
+    }
+    .cus_detailsCon {
+        margin-top: 15px;
+    }
+    .customer_details {
+        font-size: 12px;
+    }
+    #cus_address {
+        min-width: 120px;
+        max-width: 220px;
+    }
+    .color_box {
+        display: block;
+        border-bottom-right-radius: 30px;
+        border-bottom-left-radius: 30px;
+    }
+    .qrReader {
+        width: 250px;
+    }
+}
