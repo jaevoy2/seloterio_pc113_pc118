@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="http://backend-folder.test/dist/css/dropify.min.css">
+    <link rel="stylesheet" href="https://backend-folder.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/media.css">
     <title>Document</title>
 </head>
 <body>
@@ -67,7 +68,7 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">Roles and Permissions</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="role_permission.php">Roles and Permissions</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
                                     <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
@@ -79,21 +80,13 @@
                                 <div class="">
                                     <div class="d-flex p-4 flex-column position-relative" style="gap:100px">
                                         <div>
-                                            <div class="btn_container mb-3 d-grid d-md-flex justify-content-between align-items-center">
+                                            <div class="btn_container mb-3 d-flex justify-content-between align-items-center">
                                                 <div class="position-absolute" style="width: 5px; height:30px; background-color:#fbc523; left:0; border-radius:0 3px 3px 0"></div>
                                                 <h5>Roles</h5>
+                                                <a href="add-role.php" class="btn btn-sm fw-semibold" style="background-color: #ffbf00">Add role</a>
                                             </div>
                                             <div class="pt-2">
                                                 <div class="d-flex flex-wrap align-items-center gap-3 p-3 fw-bold" style="font-size: 12px; min-height: 100px; background: #f1f1f1; border-radius:10px" id="roleWrapper"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <div class="position-absolute" style="width: 5px; height:30px; background-color:#fbc523; left:0; border-radius:0 3px 3px 0"></div>
-                                            <div class="btn_container mb-3 d-grid d-md-flex justify-content-between align-items-center">
-                                                <h5>Permission</h5>
-                                            </div>
-                                            <div class="pt-2">
-                                                <div class="d-flex flex-wrap align-items-center gap-3 p-3 fw-bold" style="font-size: 12px; min-height: 100px; background: #f1f1f1; border-radius:10px" id="permissionWrapper"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +110,7 @@
     <script>
         const token = localStorage.getItem('token');
         if(!token) {
-            window.location.href = 'http://frontend-folder.test';
+            window.location.href = 'https://frontend-folder.test';
         }else{
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
@@ -147,7 +140,7 @@
      <script>
         $(document).ready(function() {
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/roles-permissions',
+                url: 'https://backend-folder.test/api/admin/roles-permissions',
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -155,32 +148,22 @@
                 },
                 success: function(data) {
                     let roleContainer = document.getElementById('roleWrapper');
-
-                    let addBtn = document.createElement('button');
-                    addBtn.classList.add('addBtn');
-                    addBtn.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="30"  height="30"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.929 4.929a10 10 0 1 1 14.141 14.141a10 10 0 0 1 -14.14 -14.14zm8.071 4.071a1 1 0 1 0 -2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0 -2h-2v-2z" /></svg>';
-                    addBtn.onclick = function() {
-                        let addRole = new bootstrap.Modal(document.getElementById('addRole'));
-                        addRole.show();
-                    }
-                    roleContainer.appendChild(addBtn);
-
                     data.roles.forEach(role => {
                         let roleCon = document.createElement('div');
                         roleCon.classList.add('role-item');
                         roleCon.textContent = role.name;
 
-                        let editRole = document.createElement('button');
-                        editRole.classList.add('editRoleBtn');
-                        editRole.dataset.id = role.id;
-                        editRole.dataset.name = role.name;
+                        let editRole = document.createElement('a');
+                        editRole.classList.add('editRoleBtn', 'px-1');
+                        editRole.style.color = 'black';
+                        editRole.href = `http://frontend-folder.test/edit-role.php?id=${role.id}`;
                         editRole.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>';
-                        editRole.onclick = function() {
-                            let edit_role = new bootstrap.Modal(document.getElementById('editRoleModal'));
-                            $('#editRoleModal').find('input[name="roleName"]').val(role.name);
-                            $('#editRoleModal').find('input[name="editRoleId"]').val(role.id);
-                            edit_role.show();   
-                        }
+                        // editRole.onclick = function() {
+                        //     let edit_role = new bootstrap.Modal(document.getElementById('editRoleModal'));
+                        //     $('#editRoleModal').find('input[name="roleName"]').val(role.name);
+                        //     $('#editRoleModal').find('input[name="editRoleId"]').val(role.id);
+                        //     edit_role.show();   
+                        // }
 
                         let deleteRole = document.createElement('button');
                         deleteRole.classList.add('deleteBtn');
@@ -207,94 +190,14 @@
         })
      </script>
 
-    <!-- add role -->
-     <script>
-        $(document).on('click', '#saveRole', function(event) {
-            event.preventDefault();
-            let role = document.getElementById('role_name').value;
-
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/save-role',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                data: {
-                    name: role
-                },
-                success: function(response) {
-                    if(!response.message) {
-                        document.getElementById('roleError').textContent = response.error;
-                    }else{
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-                }
-            })
-        })
-     </script>
-
-     <!-- edit role -->
-      <script>
-        $(document).on('click', '#saveEditRole', function(event) {
-            event.preventDefault();
-            let rolename = document.getElementById('editRoleName').value;
-            let roleId = document.getElementById('editRoleId').value;
-            console.log(roleId);
-
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/edit-role',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                data: {
-                    id: roleId,
-                    name: rolename
-                },
-                success: function(response) {
-                    if(!response.message) {
-                        document.getElementById('editRoleError').textContent = response.error;
-                    }else {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-                }
-            })
-        })
-      </script>
-
     <!-- delete role -->
      <script>
         $(document).on('click', '#confirmDelete', function(event) {
             event.preventDefault();
             let id = document.getElementById('roleDeleteId').value;
-            console.log(id);
 
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/delete-role',
+                url: 'https://backend-folder.test/api/admin/delete-role',
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -326,188 +229,6 @@
      </script>
 
     
-
-    <!-- permissions -->
-    <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/roles-permissions',
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                success: function(data) {
-                    let permissionContainer = document.getElementById('permissionWrapper');
-
-                    let addBtn = document.createElement('button');
-                    addBtn.classList.add('addBtn');
-                    addBtn.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="30"  height="30"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.929 4.929a10 10 0 1 1 14.141 14.141a10 10 0 0 1 -14.14 -14.14zm8.071 4.071a1 1 0 1 0 -2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0 -2h-2v-2z" /></svg>';
-                    addBtn.onclick = function() {
-                        let add_perm = new bootstrap.Modal(document.getElementById('addPermission'));
-                        add_perm.show();
-                    }
-                    permissionContainer.appendChild(addBtn);
-
-                    data.permissions.forEach(permission => {
-                        let permissionCon = document.createElement('div');
-                        permissionCon.classList.add('permission-item');
-                        permissionCon.textContent = permission.name;
-
-                        let editPermission = document.createElement('button');
-                        editPermission.classList.add('editBtn');
-                        editPermission.dataset.id = permission.id;
-                        editPermission.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>';
-                        editPermission.onclick = function() {
-                            let edit_permission = new bootstrap.Modal(document.getElementById('editPermission'));
-                            $('#editPermission').find('input[name="permission_name"]').val(permission.name);
-                            $('#editPermission').find('input[name="editPermissionId"]').val(permission.id);
-                            edit_permission.show();   
-                        }
-
-                        let deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('deleteBtn');
-                        deleteBtn.dataset.id = permission.id;
-                        deleteBtn.innerHTML = '<svg  xmlns="http://www.w3.org/2000/svg"  width="15"  height="15"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
-                        deleteBtn.onclick = function() {
-                            let delete_permission = new bootstrap.Modal(document.getElementById('deletePermission'));
-                            document.querySelector('.permissionName').textContent = permission.name;
-                            $('#deletePermission').find('input[name="permissionDeleteId"]').val(permission.id);
-                            delete_permission.show();
-                        }
-
-                        permissionCon.appendChild(editPermission);
-                        permissionCon.appendChild(deleteBtn);
-                        permissionContainer.appendChild(permissionCon);
-
-                        if(permission.name == 'Manage User' || permission.name == 'System Settings') {
-                            editPermission.style.display = 'none';
-                            deleteBtn.style.display = 'none';
-                        }
-                    });
-                }
-            })
-        })
-    </script>
-
-    <!-- add permission -->
-     <script>
-        $(document).on('click', '#savePermission', function(event) {
-            event.preventDefault();
-            let permission_name = document.getElementById('perm_name').value;
-
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/save-permission',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                data: {
-                    name: permission_name
-                },
-                success: function(response) {
-                    if(!response.message) {
-                        document.getElementById('perm_error').textContent = response.error;
-                    }else{
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        }); 
-                    }
-                }
-            })
-        })
-     </script>
-
-    <!-- edit permission -->
-     <script>
-        $(document).on('click', '#saveEditPermission', function(event) {
-            event.preventDefault();
-            let perm_name = document.getElementById('permission_name').value;
-            let id = document.getElementById('editPermissionId').value;
-
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/edit-permission',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                data: {
-                    id: id,
-                    name: perm_name
-                },
-                success: function(response) {
-                    if(!response.message) {
-                        document.getElementById('editPerm_error').textContent = response.error;
-                    }else {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        }); 
-                    }
-                }
-            })
-        })
-     </script>
-
-    <!-- delete permission -->
-     <script>
-        $(document).on('click', '#delete_permission', function(event) {
-            event.preventDefault();
-            
-            let id = document.getElementById('permissionDeleteId').value;
-            console.log(id);
-
-            $.ajax({
-                url: 'http://backend-folder.test/api/admin/delete-permission',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    console.log(id);
-                    if(!response.message) {
-                        document.getElementById('deletePerm_error').textContent = response.error;
-                    }else {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            color: "#008000",
-                            width: 350,
-                            toast: true,
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then(() => {
-                            location.reload();
-                        }); 
-                    }
-                }
-            })
-        })
-     </script>
 
 </body>
 </html>

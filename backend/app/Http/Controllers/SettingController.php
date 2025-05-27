@@ -20,15 +20,31 @@ class SettingController extends Controller
         ]);
     }
 
+    public function showSpecific(Request $request) {
+        $roleId = Role::with('permissions')->where('id', $request->role_id)->first();
+        $permissions = Permission::all();
+        return response()->json([
+            'role' => $roleId,
+            'permissions' => $permissions
+        ]);
+    }
+
     public function saveRole(Request $request) {
         try {
             $validate = $request->validate([
-                'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/']
+                'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/'],
+                'permissions' => 'required'
             ]);
-            $validate['name'] = ucwords(strtolower($validate['name']));
+
             $role = Role::create($validate);
+
+            if($request->permissions) {
+                $role->permissions()->sync($request->permissions);
+            }
+
             return response()->json([
                 'message' => 'Role created successfully',
+                'permissions' => $request->permissions
             ]);
         }catch(ValidationException $e) {
             return response()->json([
@@ -41,10 +57,15 @@ class SettingController extends Controller
         try {
             $role = Role::find($request->id);
             $validate = $request->validate([
-                'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/']
+                'name' => ['nullable', 'string', 'regex:/^[A-Za-z\s]+$/'],
+                'permissions' => 'nullable'
             ]);
             $validate['name'] = ucwords(strtolower($validate['name']));
             $role->update($validate);
+
+            if($request->permissions) {
+                $role->permissions()->sync($request->permissions);
+            }
 
             return response()->json([
                 'message' => 'Role updated successfully',
@@ -70,7 +91,7 @@ class SettingController extends Controller
             $role->delete();
             DB::commit();
             return response()->json([
-                'message' => 'Role deleted successfully, user reassigned successfully'
+                'message' => 'Role deleted successfully'
             ]);
         }catch(Exception $e) {
             DB::rollback();
@@ -80,55 +101,8 @@ class SettingController extends Controller
         }
     }
 
-    public function savePermission(Request $request) {
-        try {
-            $validate = $request->validate([
-                'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/']
-            ]);
-            $validate['name'] = ucwords(strtolower($validate['name']));
-            $permission = Permission::create($validate);
-            return response()->json([
-                'message' => 'Permission added successfuly'
-            ]);
-        }catch(ValidationException $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
 
-    public function editPermission(Request $request) {
-        try {
-            $permission = Permission::find($request->id);
-            $validate = $request->validate([
-                'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/']
-            ]);
-            $validate['name'] = ucwords(strtolower($validate['name']));
-            $permission->update($validate);
-            return response()->json([
-                'message' => 'Permission updated successfully'
-            ]);
-        }catch(ValidationException $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
 
-    public function removePermisison(Request $request) {
-        try {
-            $permission = Permission::find($request->id);
-            $permission->delete();
-
-            return response()->json([
-                'message' => 'Permission deleted successfully'
-            ]);
-        }catch(Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
 
 
     // menus
@@ -147,31 +121,20 @@ class SettingController extends Controller
         ]);
     }
 
-    public function storeMenu(Request $request) {
-        $validate = $request->validate([
-            'name' => 'array',
-            'menus.*.name'
-        ]);
-        foreach ($request->menus as $menu) {
-            Menu::create([
-                'name' => $menu['name']
-            ]);
-        }
-        return response()->json([
-            'message' => 'Inserted'
-        ]);
-    }
+    public function saveMenuPerm(Request $request) {
+        try{
+            $menuPerm = Menu::with('permissions')->get();
+            foreach($menuPerm as $removePerm) {
+                $removePerm->permissions()->detach();
+            }
 
-    public function storeMenuPermission(Request $request) {
-        try {
-            $validate = $request->validate([
-                'menu_id' => 'required',
-                'permission_id' => 'required'
-            ]);
-            $menu = Menu::find($request->menu_id);
-            $menu->permissions()->syncWithoutDetaching($request->permission_id);
+            foreach($request->menus as $menuData) {
+                $menu = Menu::find($menuData['id']);
+                $menu->permissions()->sync($menuData['permissions']);
+            }
+
             return response()->json([
-                'message' => 'Added successfully'
+                'message' => 'Saved',
             ]);
         }catch(ValidationException $e) {
             return response()->json([
@@ -180,23 +143,7 @@ class SettingController extends Controller
         }
     }
 
-    public function removePermission(Request $request) {
-        try {
-            $menu = Menu::find($request->menu_id);
-            $hasPermission = $menu->permissions()
-            ->wherePivot('permission_id', $request->permission_id)
-            ->exists();
 
-            if($hasPermission) {
-                $menu->permissions()->detach($request->permission_id);
-            }
-            return response()->json([
-                'message' => 'Permission removed'
-            ]);
-        }catch(Exception $e) {
-            return respons()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
+
+
 }

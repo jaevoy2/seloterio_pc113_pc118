@@ -1,24 +1,37 @@
+<style>
+    @media print {
+    .no_print {
+        display: none !important;
+    }
+}
+
+</style>
+
 <div class="offcanvas offcanvas-end d-flex flex-column justify-content-center px-3" style="width: 900px" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-        <img src="http://backend-folder.test/images/padeliber.png" style="height: 50px" alt="">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <img src="https://backend-folder.test/images/padeliber.png" style="height: 50px" alt="">
+        <button type="button" class="btn-close no_print" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div class="dropdown d-flex flex-row-reverse">
+        <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
             <div class="" data-bs-toggle="dropdown" aria-expanded="false" >
                 <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
             </div>
 
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Download PDF</a></li>
-              <li><a class="dropdown-item" href="#">Print</a></li>
+                <li>
+                    <a class="dropdown-item d-flex gap-2 align-items-center" id="print" style="font-size: 13px" id="printTable" href="#">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                        Print
+                    </a>
+                </li>
             </ul>
         </div>
     <div class="top-con d-flex flex-column gap-3 px-3 pb-3">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">Employee information</h5>
         <div class="pb-3 card" style="">
             <div class="d-flex align-items-center gap-3 py-2 px-3">
-                <img src="" class="picture" alt="" style="width: 90px; height: 90px; border-radius:50%">
+                <img src="" class="picture user_picture" alt="" style="width: 90px; height: 90px; border-radius:50%">
                 <div class="" style="">
                     <div class="fullname fw-semibold"></div>
                     <div class=" text-secondary" style="font-size: 13px">
@@ -29,7 +42,7 @@
         </div>
         <div class="employee-info card p-3 mt-3" style="">
             <div class="fs-6 fw-semibold mb-2">Personal Information</div>
-            <div class="d-flex" style="gap: 250px">
+            <div class="d-flex user_info" style="">
                 <div class="d-flex flex-column gap-4" style="">
                     <div class="">
                         <div class="text-secondary" style="font-size: 13px">First name</div>
@@ -96,6 +109,12 @@
         document.querySelector('.gender').textContent = gender;
         document.querySelector('.contact').textContent = contact;
         document.querySelector('.address').textContent = address;
-        document.querySelector('.picture').src = 'http://backend-folder.test/storage/' + picture;
+        document.querySelector('.picture').src = 'https://backend-folder.test/storage/' + picture;
+    })
+</script>
+
+<script>
+    $(document).on('click', '#print', function() {
+        window.print();
     })
 </script>

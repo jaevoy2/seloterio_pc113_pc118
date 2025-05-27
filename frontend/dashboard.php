@@ -6,12 +6,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/media.css">
     <title>Document</title>
 </head>
 <body>
-
-
     
     <?php include 'partials/sidebar.php' ?>
     <div class="card_con position-relative" style="width: 100%" style="">
@@ -64,16 +63,55 @@
                         <img class="" src="{{asset('images/no-internet.png')}}" style="width: 30%"></img>
                         <p class="fw-semibold">No internet connection</p>
                     </div>
-                    <div class="mt-4 py-3" style="display: none;" id="content">
-                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="dashboard.php">Dashboard</a>
-                                </li>
-                            </ol>
-                        </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container py-3">
-                            <p class="fw-semibold">Dashboard Page </p>
+                    <div class="mt-4 py-3 px-2" style="display: none;" id="content">
+                        <div class="align-items-center" id="dashboard_boxes" style="">
+                            <div class="shadow rounded boxes" id="order-con" style="display: none; background-color: #ffbf00;">
+                                <div class="d-flex align-items-center fw-bold gap-2">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-archive"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 3m0 2a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2z" /><path d="M19 9c.513 0 .936 .463 .993 1.06l.007 .14v7.2c0 1.917 -1.249 3.484 -2.824 3.594l-.176 .006h-10c-1.598 0 -2.904 -1.499 -2.995 -3.388l-.005 -.212v-7.2c0 -.663 .448 -1.2 1 -1.2h14zm-5 2h-4l-.117 .007a1 1 0 0 0 0 1.986l.117 .007h4l.117 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>                                
+                                    New Orders
+                                </div>
+                                <p id="orders" class="fw-bold box-count m-0"></p>
+                                <a href="manage-orders.php" class="subs d-flex justify-content-end text-decoration-none text-dark fw-semibold" style="display: none; cursor: pointer;">
+                                    Manage
+                                </a>
+                            </div>
+                            <div class="bg-white shadow rounded boxes" id="delivered-con" style="display: none;">
+                                <div class="d-flex align-items-center fw-bold gap-2">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-truck"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 4a1 1 0 0 1 1 1h4a1 1 0 0 1 .783 .378l.074 .108l3 5l.055 .103l.04 .107l.029 .109l.016 .11l.003 .085v6a1 1 0 0 1 -1 1h-1.171a3.001 3.001 0 0 1 -5.658 0h-4.342a3.001 3.001 0 0 1 -5.658 0h-1.171a1 1 0 0 1 -1 -1v-11a2 2 0 0 1 2 -2zm-6 12a1 1 0 1 0 0 2a1 1 0 0 0 0 -2m10 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2m.434 -9h-3.434v3h5.234z" /></svg>
+                                    Delivered
+                                </div>
+                                <p id="delivered" class="fw-bold box-count m-0"></p>
+                                <p id="in_transit" style="" class="d-flex justify-content-end subs fw-semibold m-0 mt-2">In Transit: 5</p>
+                            </div>
+                            <div class="bg-white shadow rounded boxes" id="employee-con" style="display: none; height: 100%">
+                                <div class="d-flex align-items-center fw-bold gap-2">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                                    Employees
+                                </div>
+                                <p id="users" class="fw-bold box-count mb-0"></p>
+                                <p id="" style="" class="d-flex justify-content-end text-white subs fw-semibold m-0 mt-2">In Transit: 5</p>
+                            </div>
+                            <div class="bg-white shadow rounded boxes" id="rider-con" style="display: none;">
+                                <div class="d-flex align-items-center fw-bold gap-2">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-helmet"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a9 9 0 0 1 5.656 16h-11.312a9 9 0 0 1 5.656 -16z" /><path d="M20 9h-8.8a1 1 0 0 0 -.968 1.246c.507 2 1.596 3.418 3.268 4.254c2 1 4.333 1.5 7 1.5" /></svg>
+                                    Delivery Rider
+                                </div>
+                                <p id="riders" class="fw-bold box-count my-2"></p>
+                            </div>
+                            <div class="shadow rounded boxes" id="my-delivery-con" style="display: none; background-color: #ffbf00;">
+                                <div class="d-flex align-items-center fw-bold gap-2">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-truck"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 4a1 1 0 0 1 1 1h4a1 1 0 0 1 .783 .378l.074 .108l3 5l.055 .103l.04 .107l.029 .109l.016 .11l.003 .085v6a1 1 0 0 1 -1 1h-1.171a3.001 3.001 0 0 1 -5.658 0h-4.342a3.001 3.001 0 0 1 -5.658 0h-1.171a1 1 0 0 1 -1 -1v-11a2 2 0 0 1 2 -2zm-6 12a1 1 0 1 0 0 2a1 1 0 0 0 0 -2m10 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2m.434 -9h-3.434v3h5.234z" /></svg>
+                                    My Delivery
+                                </div>
+                                <p id="my-delivery" class="fw-semibold box-count m-0"></p>
+                                <div class="d-flex justify-content-end" style="">
+                                    <!-- <div class="" style="font-size: 12px">5 min ago</div> -->
+                                    <a href="my-delivery.php" id="" class="subs d-flex align-items-center justify-content-end text-decoration-none text-dark fw-semibold" style="display: none; cursor: pointer;">
+                                        <svg class="me-1" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4c4.29 0 7.863 2.429 10.665 7.154l.22 .379l.045 .1l.03 .083l.014 .055l.014 .082l.011 .1v.11l-.014 .111a.992 .992 0 0 1 -.026 .11l-.039 .108l-.036 .075l-.016 .03c-2.764 4.836 -6.3 7.38 -10.555 7.499l-.313 .004c-4.396 0 -8.037 -2.549 -10.868 -7.504a1 1 0 0 1 0 -.992c2.831 -4.955 6.472 -7.504 10.868 -7.504zm0 5a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>
+                                        View
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>  
                 </div>
@@ -115,42 +153,44 @@
 </script>
 
 <script>
-    $.ajax({
-        url: 'https://backend-folder.test/api/admin/menus',
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            'Accept': 'application/json'
-        },
-        success: function(data) {
-            let menuElement = document.querySelectorAll('li[id]');
-            let menuIds = [];
-            
-            menuElement.forEach(menu => {
-                if(!data.menus.find(menuCon => menuCon.name == menu.id)) {
-                    menuIds.push({
-                        name: menu.id
-                    });
-                }
-            });
-
-            if(menuIds.lenght > 0) {
-                $.ajax({
-                    url: 'https://backend-folder.test/api/admin/store-menus',
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        menus: menuIds
-                    }
-                })
+    $(document).ready(function() {
+        fetch('https://backend-folder.test/api/dashboard-content', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
-        }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            const role = data.role.name;
+            const permissions = data.role.permissions;
+
+            
+            permissions.forEach(permission => {
+                if(permission.name == 'manage_user' && role == 'Admin') {
+                    document.getElementById('employee-con').style.display = 'block';
+                    document.getElementById('users').textContent = data.users;
+                }
+                if(permission.name == 'manage_user' && role != 'Admin') {
+                    document.getElementById('rider-con').style.display = 'block';
+                    document.getElementById('riders').textContent = data.riders;
+                }
+                if(permission.name == 'manage_deliveries') {
+                    document.getElementById('order-con').style.display = 'block';
+                    document.getElementById('delivered-con').style.display = 'block';
+                    document.getElementById('orders').textContent = data.orders;
+                    document.getElementById('delivered').textContent = data.delivered;
+                    document.getElementById('in_transit').textContent = 'In Transit: ' + data.transit;
+                }
+                if(permission.name == 'handle_sms') {
+                    document.getElementById('my-delivery-con').style.display = 'block';
+                    document.getElementById('my-delivery').textContent = data.myDelivery;
+                }
+            })
+        })
     })
-
-
 </script>
 
 </body>

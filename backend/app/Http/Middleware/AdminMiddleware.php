@@ -20,12 +20,16 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         try{
-            $user = User::with('permissions')->find(Auth::id());
-                if($user->permissions[0]->name == 'Manage User'){
+            $user = User::with('role.permissions')->find(Auth::id());
+            $permissions = $user->role->permissions;
+            foreach($permissions as $permission) {
+                if($permission->name == 'manage_user' || $user->role->name == 'Admin') {
                     return $next($request);
-                }else{
-                    return response()->json(['message' => 'Unauthorized'], 401);
                 }
+            }
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
         }catch(Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),

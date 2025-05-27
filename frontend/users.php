@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="http://backend-folder.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://backend-folder.test/dist/css/dropify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/media.css">
     <title>Document</title>
 </head>
 <body>
@@ -70,24 +71,41 @@
                                     <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">User Management</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">User List</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">List</a>
                                 </li>
                             </ol>
                         </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3 user-table">
-                            <div class="btn_container d-grid d-md-flex justify-content-between align-items-center">
-                                <button type="button" id="submitId" class="btn btn-primary add-user fw-semibold text-dark" data-bs-toggle="modal" data-bs-target="#addUser">Add user</button>
+                        <div class="bg-white shadow bg-body-tertiary rounded container mt-4 p-3 user-table">
+                            <div class="btn_container d-flex justify-content-between align-items-center">
+                                <button type="button" id="add_btn_user" class="btn btn-primary add-user fw-semibold text-dark" data-bs-toggle="modal" data-bs-target="#addUser">Add user</button>
+                                <div class="dropdown d-flex flex-row-reverse no_print" id="noPrint">
+                                    <div class="" data-bs-toggle="dropdown" aria-expanded="false" >
+                                        <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#002"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                    </div>
+
+                                    <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" href="#">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-export"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>
+                                        Export PDF
+                                    </a></li>
+                                    <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" id="printTable" href="#">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                                        Print
+                                    </a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="pt-2">
+                            <!-- update user email is still not working -->
+                            <div class="pt-2" id="printTableCon">
                                 <table id="usersTable" class="stripe hover">
                                     <thead class="text-dark " style="background-color: #ffbf00;">
                                         <tr>
                                             <th>#</th>
                                             <th>Image</th>
-                                            <th>Last Name</th>
-                                            <th>First Name</th>
+                                            <th>Lastname</th>
+                                            <th>Firstname</th>
                                             <th>Role</th>
-                                            <!-- <th>Permission</th> -->
+                                            <th>is_active</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -110,14 +128,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
-    <script src="http://backend-folder.test/dist/js/dropify.min.js"></script>
+    <script src="https://backend-folder.test/dist/js/dropify.min.js"></script>
 
 
     <!-- prevent back -->
     <script>
         const token = localStorage.getItem('token');
         if(!token) {
-            window.location.href = 'http://frontend-folder.test';
+            window.location.href = 'https://frontend-folder.test';
         }else{
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
@@ -161,7 +179,7 @@
      <script>
         $(document).ready(function() {
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/users',
+                url: 'https://backend-folder.test/api/admin/users',
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -172,6 +190,8 @@
                     if(response) {
                         $('#usersTable').DataTable({
                             data: response.users,
+                            scrollX: true,
+                            dom: '<"top-controls"lf>t<"bottom-controls"ip><"clear">',
                             columns: [
                                 {
                                     data: null,
@@ -183,7 +203,7 @@
                                     data: 'picture',
                                     render: function(data, type, row) {
                                         return data
-                                        ? `<img src="http://backend-folder.test/storage/${data}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` : 'No image';
+                                        ? `<img src="https://backend-folder.test/storage/${data}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` : 'No image';
                                     }
                                 },
                                 { data: 'lastname' },
@@ -198,7 +218,17 @@
                                         }else if(data.name == "Rider" || data.name == "Delivery Rider" || data.name == "Delivery Man" || data.name == "Food Delivery Rider" || data.name == "Food Rider"){
                                             return `<div class="btn btn-primary fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`;
                                         }else{
-                                            return `<div class="btn btn-secondary fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`
+                                            return `<div class="btn btn-secondary fw-semibold btn-sm" style="font-size: 10px"> ${data.name} </div>`;
+                                        }
+                                    }
+                                },
+                                {
+                                    data: 'status',
+                                    render: function(data, type, row) {
+                                        if(row.status == 'active' || row.status == 'available' || row.status == 'Assigned') {
+                                            return `<div class="text-success fw-semibold btn-sm" style="font-size: 13px">Active</div>`;
+                                        }else{
+                                            return `<div class="text-secondary fw-semibold btn-sm" style="font-size: 13px">Inactive</div>`;
                                         }
                                     }
                                 },
@@ -250,26 +280,11 @@
         })
      </script>
 
-    <script>
-        function toggleCheckboxes() {
-            const checkboxes = document.getElementById('checkboxes');
-            checkboxes.style.display = checkboxes.style.display === 'block' ? 'none' : 'block';
-        }
-        document.addEventListener('click', function(event) {
-            const target = event.target;
-            const checkboxes = document.getElementById('checkboxes');
-            if (!checkboxes.contains(target) && !target.matches('.selectBox, .selectBox *')) {
-                checkboxes.style.display = 'none';
-            }
-        });
-
-    </script>
-
     <!-- Add user -->
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/users',
+                url: 'https://backend-folder.test/api/admin/users',
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -277,7 +292,6 @@
                     'Content-Type': 'application/json'
                 },
                 success: function(response) {
-                    console.log(response.currentUser);
                     let roles = response.roles;
                     let permissions = response.permissions;
                     
@@ -298,43 +312,17 @@
                         if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
                             return;
                         }
-                        select.appendChild(option);
-                    });
-
-                    select.addEventListener('change', function() {
-                        const selectedRole = this.value;
-                        const userRole = roles.find(role => role.id == selectedRole);
-                        const permissionContainer = document.getElementById('checkboxes');
-                        permissionContainer.innerHTML = '';
-
-                        if(userRole.name == null) {
-                            permissionContainer.style.display = 'none';
-                        }else if (userRole.name == "Rider" || userRole.name == "Delivery Rider" || userRole.name == "Unassigned" || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
-                            permissionContainer.style.display = 'none';
-                        }else{
-                            permissions.forEach(permission => {
-                                let inputContainer = document.createElement('div');
-                                inputContainer.classList.add('checkbox-container');
-
-                                let checkbox = document.createElement('input');
-                                checkbox.classList.add('check_permission');
-                                checkbox.type = 'checkbox';
-                                checkbox.value = permission.id;
-                                checkbox.name = 'permissions[]';
-
-                                let label = document.createElement('label');
-                                label.htmlFor = `checkbox${permission.id}`;
-                                label.textContent = permission.name;
-
-                                inputContainer.appendChild(checkbox);
-                                inputContainer.appendChild(label);
-                                permissionContainer.appendChild(inputContainer);
-                            });
+                        if(role.name == 'Unassigned') {
+                            return;
                         }
+                        select.appendChild(option);
                     });
                     
                     $(document).on('click', '#register', function(event) {
                         event.preventDefault();
+                        document.getElementById('register').disabled = true;
+                        document.getElementById('registerSpinner').style.display = 'block';
+
                         let firstname = document.getElementById('firstname').value;
                         let middlename = document.getElementById('middlename').value;
                         let lastname = document.getElementById('lastname').value;
@@ -346,13 +334,11 @@
                         let password = document.getElementById('password').value;
                         let role_id = document.getElementById('userRole').value;
                         let picture = document.getElementById('profile').files[0];
-                        let permissions = [];
-                        document.querySelectorAll('.check_permission:checked').forEach((checkbox) => {
-                            permissions.push(checkbox.value);
-                        });
 
                         if (role_id == null) {
                             document.getElementById('addUser_error').textContent = 'Please select a role first';
+                            document.getElementById('registerSpinner').style.display = 'none';
+                            return;
                         }
 
                         let formData = new FormData();
@@ -366,16 +352,12 @@
                         formData.append('email', email);
                         formData.append('password', password);
                         formData.append('role_id', role_id);
-
-                        permissions.forEach(permission => {
-                            formData.append('permissions[]', permission);
-                        });
                         
                         if(picture) {
                             formData.append('picture', picture);
                         }
                         $.ajax({
-                            url: 'http://backend-folder.test/api/admin/add-user',
+                            url: 'https://backend-folder.test/api/admin/add-user',
                             method: 'POST',
                             headers: {
                                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -403,28 +385,16 @@
                                     });
                                 }
 
+                            },
+                            complete: function() {
+                                document.getElementById('registerSpinner').style.display = 'none';
+                                document.getElementById('register').disabled = false;
                             }
                         })
                     })
                 }
             });
         });
-    </script>
-
-
-    <script>
-        function editCheckboxes() {
-            const checkboxes = document.getElementById('editCheckboxes');
-            checkboxes.style.display = checkboxes.style.display === 'block' ? 'none' : 'block';
-        }
-        document.addEventListener('click', function(event) {
-            const target = event.target;
-            const checkboxes = document.getElementById('editCheckboxes');
-            if (!checkboxes.contains(target) && !target.matches('.selectBox, .selectBox *')) {
-                checkboxes.style.display = 'none';
-            }
-        });
-
     </script>
 
     <!-- populate the form -->
@@ -441,6 +411,12 @@
             let address = $(this).data("address");
             let roleSelected = $(this).data("role");
             let picture = $(this).data("picture");
+            if(picture != null) {
+                document.getElementById('removeExistingProfile').style.display = 'flex';
+            }else{
+                document.getElementById('removeExistingProfile').style.display = 'none';
+            }
+
 
             $('#editUser').find("input[name='editUserId']").val(userId);
             $('#editUser').find("input[name='firstname']").val(firstname);
@@ -454,7 +430,7 @@
             document.getElementById('userProfileId').value = userId;
 
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/users',
+                url: 'https://backend-folder.test/api/admin/users',
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -481,47 +457,15 @@
                         if(response.currentUser !== 'Admin' && role.name == 'Admin' || response.currentUser !== 'Admin' && role.name == response.currentUser ) {
                             return;
                         }
+                        if(role.name == 'Unassigned') {
+                            return;
+                        }
                         if(roleSelected == role.name) {
                             option.selected = true;
                         }
                         select.appendChild(option);
                     });
                     
-                    document.getElementById('editRole').addEventListener('change', function() {
-                        const selectedRole = this.value;
-                        const permissionContainer = document.getElementById('editCheckboxes');
-                        const userRole = roles.find(role => role.id == selectedRole);
-                        permissionContainer.innerHTML = '';
-
-                        if(userRole.name == 'Rider' || userRole.name == 'Delivery Rider' || userRole.name == 'Unassigned' || userRole.name == "Food Rider" || userRole.name == "Food Delivery Rider") {
-                            permissionContainer.style.display = 'none';
-                        }else{
-                            const permissions = response.permissions;
-                            permissions.forEach(permission => {
-                                let inputContainer = document.createElement('div');
-                                inputContainer.classList.add('checkbox-container');
-
-                                const checkbox = document.createElement('input');
-                                checkbox.classList.add('checked_permission');
-                                checkbox.type = 'checkbox';
-                                checkbox.id = `checkbox${permission.id}`;
-                                checkbox.value = permission.id;
-                                checkbox.name = 'permissions[]';
-
-                                const label = document.createElement('label');
-                                label.htmlFor = `checkbox${permission.id}`;
-                                label.textContent = permission.name;
-
-                                inputContainer.appendChild(checkbox);
-                                inputContainer.appendChild(label);
-                                permissionContainer.appendChild(inputContainer);
-
-                                if(userPerm.permissions.some(userPermission => userPermission.id == permission.id)) {
-                                    checkbox.checked = true;
-                                }
-                            });
-                        }
-                    });
                     document.getElementById('editRole').dispatchEvent(new Event('change'));
                 }
             });
@@ -532,6 +476,8 @@
     <script>
         $(document).on('click', '#updateBtn', function(event) {
             event.preventDefault();
+            document.getElementById('editSpinner').style.display = 'block';
+
             let userId = document.getElementById('editUserId').value;           
             let editFname = document.getElementById('editFname').value;
             let editMname = document.getElementById('editMname').value;
@@ -543,10 +489,6 @@
             let editEmail = document.getElementById('editEmail').value;
             let role_id = document.getElementById('editRole').value;
             let picture = document.getElementById('editProfile').files[0];
-            let permissions = [];
-            document.querySelectorAll('.checked_permission:checked').forEach((checkbox) => {
-                permissions.push(checkbox.value);
-            });
 
             let formData = new FormData();
             formData.append('id', userId);
@@ -562,12 +504,9 @@
             if(picture) {
                 formData.append('picture', picture);
             }
-            permissions.forEach(permission => {
-                formData.append('permissions[]', permission);
-            });
 
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/edit-user',
+                url: 'https://backend-folder.test/api/admin/edit-user',
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -594,6 +533,9 @@
                             location.reload();
                         });
                     }
+                },
+                complete: function() {
+                    document.getElementById('editSpinner').style.display = 'none';
                 }
             });
         })
@@ -617,10 +559,11 @@
     <script>
         $(document).on('click', '#delete_user', function(event) {
             event.preventDefault();
+            document.getElementById('deleteUserSpinner').style.display = 'block';
             let id = document.getElementById('confirmDeleteUser').value; 
             
             $.ajax({
-                url: 'http://backend-folder.test/api/admin/delete-user',
+                url: 'https://backend-folder.test/api/admin/delete-user',
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -644,6 +587,9 @@
                             location.reload();
                         });
                     }
+                },
+                complete: function() {
+                    document.getElementById('deleteUserSpinner').style.display = 'none';
                 }
             })
         })
@@ -653,9 +599,10 @@
      <script>
         $(document).on('click', '#confirmRemoveProfile', function(event) {
             event.preventDefault();
+            document.getElementById('deleteProfileSpinner').style.display = 'block';
             let id = document.getElementById('userProfileId').value;
 
-            fetch('http://backend-folder.test/api/remove-profile', {
+            fetch('https://backend-folder.test/api/remove-profile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -683,8 +630,18 @@
                     });
                 }
             })
+            .finally(() => {
+                document.getElementById('deleteProfileSpinner').style.display = 'none';
+            })
         })
      </script>
+
+     <!-- print table -->
+      <script>
+        $(document).on('click', '#printTable', function() {
+            window.open('partials/print-users.php', '_blank');
+        })
+      </script>
 
 
 </body>

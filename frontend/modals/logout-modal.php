@@ -7,6 +7,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <small class="d-flex justify-content-center text-danger mb-2" style="font-size: 12px" id="logout_error"></small>
                     <p>Are you sure you want to logout?</p>
                 </div>
                 <div class="modal-footer">
@@ -19,7 +20,7 @@
 
     <script>
     $(document).on('click', '#logout', function() {
-        fetch('http://backend-folder.test/api/logout', {
+        fetch('https://backend-folder.test/api/logout', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,9 +30,13 @@
         })
         .then(response => response.json())
         .then(data => {
+            if(data.message) {
+                document.getElementById('logout_error').innerHTML = data.message;
+                document.getElementById('logout').disabled = true;
+            } 
             if(data.success) {
                 localStorage.removeItem('token');
-                window.location.href = 'http://frontend-folder.test';
+                window.location.href = 'https://frontend-folder.test';
             }
         })
         .catch(error => {

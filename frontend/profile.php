@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="http://backend-folder.test/dist/css/dropify.min.css">
+    <link rel="stylesheet" href="https://backend-folder.test/dist/css/dropify.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/media.css">
     <title>Document</title>
 </head>
 <body>
@@ -67,26 +68,26 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px" href="users.php">Account Settings</a>
+                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Settings</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    <a class="text-decoration-none text-dark" style="font-size: 13px">Profile</a>
+                                    <a href="profile.php" class="text-decoration-none text-dark" style="font-size: 13px">Account Settings</a>
                                 </li>
                             </ol>
                         </nav>
                         <div class="bg-white shadow bg-body-tertiary rounded container mt-4 py-3">
                             <div class="d-flex flex-column gap-3 px-3">
-                                <h5 class="mb-0">My Profile</h5>
+                                <h5 class="mb-0 my_profile_text">My Profile</h5>
                                 <div class="card top">
                                     <div class="d-flex justify-content-between p-3">
-                                        <div class="d-flex gap-5 align-items-center">
+                                        <div class="d-flex align-items-center user_name_image">
                                             <div class="position-relative">
-                                                <img class="profile" src="" alt="" style="width: 80px; height:80px; border-radius:50%">
+                                                <img class="profile" src="" alt="" style="border-radius:50%">
                                                 <svg data-bs-toggle="modal" data-bs-target="#deleteMyProfile" class="position-absolute bottom-0 text-danger" id="removeMyProfile" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                             </div>
                                             <div class="">
                                                 <div class="fullname fw-semibold"></div>
-                                                <div class="role text-secondary" style="font-size: 13px"></div>
+                                                <div class="role text-secondary" style=""></div>
                                             </div>
                                         </div>
                                         <a href="" class="editProfile text-decoration-none" id="editProfileBtn" data-bs-toggle="modal" data-bs-target="#editProfile">
@@ -96,7 +97,7 @@
                                 </div>
                                 <div class="card mid-content d-flex flex-column gap-4 p-3">
                                     <div class="fs-6 fw-semibold">Personal Information</div>
-                                    <div class="d-flex" style="gap: 250px">
+                                    <div class="d-flex user_info" style="">
                                         <div class="d-flex flex-column gap-4" style="">
                                             <div class="">
                                                 <div class="text-secondary" style="font-size: 13px">First name</div>
@@ -165,13 +166,13 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="http://backend-folder.test/dist/js/dropify.min.js"></script>
+    <script src="https://backend-folder.test/dist/js/dropify.min.js"></script>
 
     <!-- prevent back -->
     <script>
         const token = localStorage.getItem('token');
         if(!token) {
-            window.location.href = 'http://frontend-folder.test';
+            window.location.href = 'https://frontend-folder.test';
         }else{
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, location.href);
@@ -215,7 +216,7 @@
      <script>
         $(document).ready(function() {
             $.ajax({
-                url: 'http://backend-folder.test/api/account',
+                url: 'https://backend-folder.test/api/account',
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -223,11 +224,11 @@
                 },
                 success: function(data) {
                     if(data.user.picture == null) {
-                        picture = 'http://backend-folder.test/storage/images/default.jpg';
+                        picture = 'https://backend-folder.test/storage/images/default.jpg';
                         let trash = document.getElementById('removeMyProfile');
                         trash.style.display = 'none';
                     }else {
-                        picture = 'http://backend-folder.test/storage/' + data.user.picture;
+                        picture = 'https://backend-folder.test/storage/' + data.user.picture;
                     }
 
                     const fullname = data.user.firstname + ' ' + data.user.lastname;
@@ -253,7 +254,7 @@
             event.preventDefault();
 
             $.ajax({
-                url: 'http://backend-folder.test/api/account',
+                url: 'https://backend-folder.test/api/account',
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -271,7 +272,7 @@
                     }
 
                     $.ajax({
-                        url: 'http://backend-folder.test/api/uploadFile',
+                        url: 'https://backend-folder.test/api/uploadFile',
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -311,7 +312,7 @@
             let mainContainer = document.getElementById('uploadsContainer');
             
             $.ajax({
-                url: 'http://backend-folder.test/api/getFileUploads',
+                url: 'https://backend-folder.test/api/getFileUploads',
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -356,7 +357,7 @@
             $(document).on('click', '#delete_upload', function(event) {
                 event.preventDefault();
                 $.ajax({
-                    url: 'http://backend-folder.test/api/remove-file',
+                    url: 'https://backend-folder.test/api/remove-file',
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -388,7 +389,7 @@
       <script>
         $(document).on('click', '#editProfileBtn', function() {
             $.ajax({
-                url: 'http://backend-folder.test/api/account',
+                url: 'https://backend-folder.test/api/account',
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -418,12 +419,14 @@
                         formData.append('gender', $('#editProfile').find("select[name='gender']").val());
                         formData.append('contact', $('#editProfile').find("input[name='contact']").val());
                         formData.append('address', $('#editProfile').find("input[name='address']").val());
+                        formData.append('password', $('#editProfile').find("input[name='password']").val());
+
                         if(file && file.files.length > 0){
                             formData.append('picture', file.files[0]);
                         }
 
                         $.ajax({
-                            url: 'http://backend-folder.test/api/edit-profile',
+                            url: 'https://backend-folder.test/api/edit-profile',
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
@@ -460,7 +463,7 @@
     <!-- remove profile picture -->
     <script>
         $(document).on('click', '#removeMyProfile', function() {
-            fetch('http://backend-folder.test/api/account', {
+            fetch('https://backend-folder.test/api/account', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
