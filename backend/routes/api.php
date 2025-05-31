@@ -34,6 +34,7 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
         Route::post('/add-user', [UserController::class, 'addUser'])->middleware('admin');
         Route::post('/edit-user', [UserController::class, 'editUser'])->middleware('admin');
         Route::post('/delete-user', [UserController::class, 'deleteUser'])->middleware('admin');
+        Route::post('/import', [UserController::class, 'imporFile'])->middleware('admin');
 
         // settings
         Route::get('/roles-permissions', [SettingController::class, 'showAll'])->middleware('admin');
@@ -58,6 +59,7 @@ Route::middleware(['permission', 'preventBackHistory'])->group(function() {
         // Report
         Route::get('/report', [ReportController::class, 'reportList'])->middleware('admin');
         Route::post('/filter/month', [ReportController::class, 'filterMonth'])->middleware('admin');
+        Route::post('/export', [ReportController::class, 'exportCsv'])->middleware('admin');
 
     });
 

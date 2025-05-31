@@ -84,9 +84,9 @@
                                     </div>
 
                                     <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" href="#">
-                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-export"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>
-                                        Export PDF
+                                    <li data-bs-toggle="modal" data-bs-target="#importModal"><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" href="#">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M15 15h-6" /><path d="M11.5 17.5l-2.5 -2.5l2.5 -2.5" /></svg>
+                                        Import Users
                                     </a></li>
                                     <li><a class="dropdown-item d-flex gap-2 align-items-center" style="font-size: 13px" id="printTable" href="#">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
@@ -642,6 +642,58 @@
             window.open('partials/print-users.php', '_blank');
         })
       </script>
+
+    <!-- import -->
+     <script>
+        $(document).on('click', '#import', function() {
+            document.getElementById('importSpinner').style.display = 'block';
+            let file = document.getElementById('importFile').files[0];
+            let formData = new FormData();
+            formData.append('file', file);
+
+            fetch('https://backend-folder.test/api/admin/import', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: formData,
+                processData: false,
+                contentType: false
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.message) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        color: "#008000",
+                        width: 350,
+                        toast: true,
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1200
+                    }).then(() => {
+                        location.reload();
+                    });
+                }else{
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        color: "#cc0202",
+                        width: 350,
+                        toast: true,
+                        title: response.error,
+                        showConfirmButton: false,
+                        timer: 5000
+                    })
+                }
+            })
+            .finally(() => {
+                document.getElementById('importSpinner').style.display = 'none';
+            })
+        })
+     </script>
 
 
 </body>

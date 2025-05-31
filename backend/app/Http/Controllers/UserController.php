@@ -18,6 +18,10 @@ use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Upload;
 use Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UserImport;
+use App\Imports\UserLoop;
+use Exception;
 
 class UserController extends Controller
 {
@@ -361,5 +365,46 @@ class UserController extends Controller
             'myDelivery' => $myDelivery,
             'delivered' => $delivered
         ]);
+    }
+
+    public function imporFile(Request $request) {
+        try {
+            $request->validate([
+                'file' => 'required|file|mimes:xlsx,csv',
+            ]);
+            $import = new UserLoop;
+            Excel::import($import, $request->file('file'));
+
+            foreach($import->rows as $row) {
+                $role = Role::where('name', $row['role'])->first();
+
+                if(!$role) {
+                    continue;
+                }
+
+                $user = User::create([
+                    'firstname' => $row['firstname'],
+                    'middlename' => $row['middlename'],
+                    'lastname' => $row['lastname'],
+                    'age' => $row['age'],
+                    'gender' => $row['gender'],
+                    'contact' => $row['contact'],
+                    'address' => $row['address'],
+                    'role_id' => $role->id,
+                    'email' => $row['email'],
+                    'password' => bcrypt($row['password']),
+                ]);
+                Mail::to($user->email)->send(new SendCredentials($user->id, $user->firstname));
+            }
+
+            return response()->json([
+                'message' => 'Imported successfully'
+            ]);
+
+        }catch(Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

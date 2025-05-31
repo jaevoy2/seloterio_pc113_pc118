@@ -214,3 +214,29 @@
     </div>
 </div>
 
+
+
+
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Import Users</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"  style="font-size: 13px">
+                <label class="text-secondary" for="editProfile" style="font-size: 12px">Drag or drop excel file here.</label>
+                <input type="file" class="dropify"  data-height="100" name="picture" id="importFile"/>
+            </div>
+            <div class="d-flex flex-row-reverse p-3 gap-3">
+                <button class="btn btn-primary d-flex align-items-center gap-2" id="import">
+                    <div class="spinner-border spinner-border-sm" id="importSpinner" style="display: none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Import
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

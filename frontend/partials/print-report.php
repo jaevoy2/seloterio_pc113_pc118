@@ -107,7 +107,7 @@
                                 return `<div>#ORD${row.id}</div>`
                             }
                         },
-                        { data: 'customer_name' },
+                        { data: 'name' },
                         { data: 'address' },
                         {
                             data: 'updated_at',

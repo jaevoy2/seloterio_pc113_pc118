@@ -90,6 +90,7 @@
                                             <th>Status</th>
                                             <th>Assigned Rider</th>
                                             <th>Order ID</th>
+                                            <th>Amount</th>
                                             <th>Customer Name</th>
                                             <th>Address</th>
                                         </tr>
@@ -204,7 +205,7 @@
                                 render: function(data, type, row) {
                                     if(row.status == 'To Be Deliver') {
                                         return `<div class="text-danger fw-semibold" style="font-size: 13px">${row.status}</div>`;
-                                    }else if(row.status == 'On Transit') {
+                                    }else if(row.status == 'In Transit') {
                                         return `<div class="text-warning fw-semibold" style="font-size: 13px">${row.status}</div>`;
                                     }else if(row.status == 'Delivered') {
                                         return `<div class="text-success fw-semibold" style="font-size: 13px">${row.status}</div>`;
@@ -229,6 +230,7 @@
                                     return `<div>#ORD${row.id}</div>`
                                 }
                             },
+                            { data: 'amount' },
                             { data: 'name' },
                             { data: 'address' },
                             // {

@@ -88,7 +88,7 @@
                                 </li>
                             </ol>
                         </nav>
-                        <div class="bg-white shadow bg-body-tertiary rounded container position-relative py-3">
+                        <div class="bg-white shadow bg-body-tertiary rounded container position-relative py-2">
                             <div class="line-loader position-absolute" id="line-loader" style="display: none; width: 100%; top: 0; left: 0;"></div>
                             <div class="d-flex justify-content-between align-items-center mt-4 pt-2">
                                 <form action="" id="filterForm" class="d-flex align-items-center" style="height: 35px">
@@ -114,11 +114,22 @@
                                     <div class="spinner-border spinner-border-sm ms-3" id="reportSpinner" style="display: none; color: #ffbf00;" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
-                                </form> 
-                                <button class="btn btn-danger btn-sm d-flex align-items-center gap-2" id="reportPrint">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
-                                    Print
-                                </button>
+                                </form>
+                                <div class="dropdown" id="dropExport">
+                                    <div class="" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                    </div>
+                                    <ul class="dropdown-menu user-drop py-0">
+                                        <a class="dropdown-item py-2" id="reportPrint" href="">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                                            Print
+                                        </a>
+                                        <a class="dropdown-item py-2" id="exportCsv" href="">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-export"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>
+                                            Export CSV
+                                        </a>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="">
                                 <table id="reportTable" class=" hover" style="font-size: 10px">
@@ -128,6 +139,7 @@
                                             <th>Status</th>
                                             <th>Assigned Rider</th>
                                             <th>Order ID</th>
+                                            <th>Amount</th>
                                             <th>Customer Name</th>
                                             <th>Address</th>
                                             <th>Delivered At</th>
@@ -242,6 +254,7 @@
                             return `<div>#ORD${row.id}</div>`
                         }
                     },
+                    { data: 'amount' },
                     { data: 'name' },
                     { data: 'address' },
                     {
@@ -268,9 +281,9 @@
             table.clear().rows.add(orders).draw();
             
             if(orders.length > 0) {
-                document.getElementById('reportPrint').disabled = false;
+                document.getElementById('dropExport').style.display = 'block';
             }else{
-                document.getElementById('reportPrint').disabled = true;
+                document.getElementById('dropExport').style.display = 'none';
             }
         })
 
@@ -300,9 +313,9 @@
                 table.clear().rows.add(filteredOrders).draw();
 
                 if(filteredOrders.length > 0) {
-                    document.getElementById('reportPrint').disabled = false;
+                    document.getElementById('dropExport').style.display = 'block';
                 }else{
-                    document.getElementById('reportPrint').disabled = true;
+                    document.getElementById('dropExport').style.display = 'none';
                 }
             })
             .finally(() => {
@@ -318,6 +331,48 @@
     $(document).on('click', '#reportPrint', function() {
         let id = document.getElementById('month-select').value;
         window.open(`partials/print-report.php?id=${id}`, '_blanck');
+    })
+</script>
+
+<script>
+    $(document).on('click', '#exportCsv', function(e) {
+        e.preventDefault();
+        let monthId = document.getElementById('month-select').value;
+        
+        fetch('https://backend-folder.test/api/admin/export', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                month_id: monthId
+            })
+        })
+        .then(response => {
+            const disposition = response.headers.get('Content-Disposition');
+            let filename = 'export.csv';
+
+            if (disposition && disposition.includes('filename=')) {
+                const match = disposition.match(/filename="?(.+?)"?$/);
+                if (match) {
+                    filename = match[1];
+                }
+            }
+
+            return response.blob().then(blob => ({ blob, filename }));
+        })
+        .then(({ blob, filename }) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        })
     })
 </script>
 

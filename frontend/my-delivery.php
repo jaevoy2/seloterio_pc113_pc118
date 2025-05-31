@@ -139,10 +139,6 @@
                             <svg class="me-2" xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7v-1a2 2 0 0 1 2 -2h2" /><path d="M4 17v1a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v1" /><path d="M16 20h2a2 2 0 0 0 2 -2v-1" /><path d="M5 12l14 0" /></svg>
                             SCAN QR
                         </div>
-                        <div id="capture" class="btn fw-bold mt-5" style="display: none; background-color: #ffbf00; padding: 15px 0; width: 100%; font-size: 15px" data-bs-toggle="modal" data-bs-target="#webcam">
-                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-photo-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01" /><path d="M6 13l2.644 -2.644a1.21 1.21 0 0 1 1.712 0l3.644 3.644" /><path d="M13 13l1.644 -1.644a1.21 1.21 0 0 1 1.712 0l1.644 1.644" /><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /></svg>
-                            Capture Proof
-                        </div>
                         <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="scannerModal">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -164,7 +160,6 @@
 
 <?php include 'modals/logout-modal.php' ?>
 <?php include 'modals/delivery-modal.php' ?>
-<?php include 'modals/webcam-modal.php' ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -340,7 +335,6 @@
             .then(data => {
                 if(data.order.length > 0) {
                     let order = data.order[0];
-                    console.log(order);
 
                     document.getElementById('no_order').style.display = 'none';
                     document.getElementById('content_details').style.display = 'block';
@@ -351,9 +345,8 @@
                     status.textContent = order.status;
         
                     if(order.status == 'In transit') {
-                        let captureBtn = document.getElementById('capture');
-                        captureBtn.style.display = 'block';
-                        document.getElementById('save_picture').dataset.id = order.id;
+                        let scanBtn = document.getElementById('scanBtn');
+                        scanBtn.style.display = 'block';
                         status.style.color = '#ffbf00';
                     }
                     if(order.status == 'Delivered') {
@@ -387,108 +380,6 @@
     })
  </script>
 
-
- <!-- webcam js -->
-<script>
-    $(document).ready(function() {
-        function delay(s) {
-            return new Promise(resolve => setTimeout(resolve, s))
-        }
-
-        let image;
-
-        $(document).on('click', '#capture', async function() {
-            document.getElementById('camSpinner').style.display = "flex";
-            document.getElementById('take_picture').disabled = true;
-
-            Webcam.reset();
-            await delay(500);
-            document.getElementById('camSpinner').style.display = "none";
-
-            Webcam.set({
-                width: 325,
-                height: 210,
-                image_format: 'png',
-                jpeg_quality: 90
-            })
-            Webcam.attach('#my_cam');
-
-            await delay(1000);
-
-            document.getElementById('take_picture').disabled = false;
-
-        })
-
-        $(document).on('click', '#take_picture', function() {
-            Webcam.snap(function(data_uri) {
-                Webcam.reset();
-                document.getElementById('my_cam').innerHTML = '<img src="' + data_uri + '"/>';
-                document.getElementById('take_picture').style.display = 'none';
-                document.getElementById('stop_webcam').style.display = 'none';
-                document.getElementById('retake').style.display = 'block';
-                document.getElementById('save_picture').style.display = 'flex';
-
-                image = data_uri;
-            })
-        })
-
-        $(document).on('click', '#save_picture', function() {
-            document.getElementById('proofSpinner').style.display = 'block';
-            let id = $(this).data('id');
-            console.log(id);
-
-            fetch('https://backend-folder.test/api/rider/store/proof', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    image: image,
-                    order_id: id
-                })
-            })
-            .then(res => res.json())
-            .then(response => {
-                if(!response.message) {
-                    document.getElementById('proof_error').textContent = response.error;
-                }else{
-                    console.log(response.rider);
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        color: "#008000",
-                        width: 350,
-                        toast: true,
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 1200
-                    }).then(() => {
-                        window.location.href = 'my-delivery.php'
-                    });
-                }
-            })
-            .finally(() => {
-                document.getElementById('proofSpinner').style.display = 'none';
-            })
-        })
-
-        // retake
-        $(document).on('click', '#retake', function() {
-            Webcam.attach('#my_cam');
-            document.getElementById('take_picture').style.display = 'block';
-            document.getElementById('retake').style.display = 'none';
-            document.getElementById('save_picture').style.display = 'none';
-            document.getElementById('stop_webcam').style.display = 'block';
-        })
-
-        //stop webcam 
-        $(document).on('click', '#stop_webcam', function() {
-            Webcam.reset();
-        })
-    })
- </script>
 
 
 
